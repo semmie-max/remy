@@ -34,11 +34,11 @@ async function fetchNowPlaying() {
 }
 
 fetchNowPlaying();
-setInterval(fetchNowPlaying, 30000); // refresh every 30s
+setInterval(fetchNowPlaying, 5000); // refresh every 5s
 
 const testimonials = [
   {
-    text: "Aremomhe stands out because of her ability to deliver exactly what you asked for, she's a top notch communicator and a very versatile developer.",
+    text: "Remomhe stands out because of her ability to deliver exactly what you asked for, she's a top notch communicator and a very versatile developer.",
     name: "— CEO of tulips and roses"
   },
   {
