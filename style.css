@@ -397,3 +397,26 @@
   line-height: 1;
   font-family: "Moirai One", system-ui;
 }
+
+.signature {
+  position: relative;
+  display: inline-block;
+  font-family: 'Mrs Saint Delafield', cursive;
+  font-size: 3rem;
+  color: #fff;
+  line-height: 1;
+}
+
+.sig-dot {
+  font-size: 1.5rem;
+  vertical-align: top;
+}
+
+.sig-underline {
+  width: 70%;
+  height: 1px;
+  background: #fff;
+  margin-top: -0.3rem;
+  transform: rotate(-2deg);
+  transform-origin: left;
+}
