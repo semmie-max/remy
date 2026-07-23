@@ -7,74 +7,6 @@
     font-family: 'DM Sans', sans-serif;
   }
 
-  #drawing-stage {
-    position: fixed;
-    inset: 0;
-    background: #000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 200;
-  }
-
-  #canvas-wrap {
-    position: relative;
-    width: min(480px, 80vw);
-    aspect-ratio: 600/680;
-  }
-
-  #sketch-final {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-  }
-
-  #draw-canvas {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-  }
-
-  #pencil-dot {
-    position: absolute;
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.95);
-    box-shadow: 0 0 6px 2px rgba(255,255,255,0.35);
-    pointer-events: none;
-    transform: translate(-50%, -50%);
-    z-index: 10;
-    opacity: 0;
-    transition: opacity 0.2s;
-  }
-
-  #draw-label {
-    position: absolute;
-    bottom: -2.5rem;
-    left: 0; right: 0;
-    text-align: center;
-    font-size: 0.65rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: #333;
-  }
-
-  #drawing-stage.zoom-out {
-    animation: zoomFace 1.8s cubic-bezier(0.4,0,0.2,1) forwards;
-  }
-
-  @keyframes zoomFace {
-    0%   { transform: scale(1);   opacity: 1; }
-    60%  { transform: scale(7) translateY(-5%); opacity: 1; }
-    100% { transform: scale(14) translateY(-5%); opacity: 0; pointer-events: none; }
-  }
-
   #hero {
     position: relative;
     inset: 0;
@@ -82,7 +14,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    opacity: 0;
+    opacity: 1;
     transition: opacity 0.7s ease;
     z-index: 1;
     overflow: hidden;
@@ -125,20 +57,11 @@
     font-size: clamp(3rem, 9vw, 7.5rem);
     color: #fff;
     display: inline-block;
-    opacity: 0;
-    transform: translateY(-150px) rotate(-10deg) scale(0.8);
-    animation: dropIn 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
     animation-play-state: paused;
     line-height: 1;
   }
 
-  @keyframes dropIn {
-    0%   { opacity: 0; transform: translateY(-150px) rotate(-10deg) scale(0.8); }
-    55%  { opacity: 1; transform: translateY(10px) rotate(1.5deg) scale(1.02); }
-    75%  { transform: translateY(-5px) rotate(-0.5deg) scale(0.99); }
-    100% { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
-  }
-
+  
   .name-gap { height: 0.15em; }
 
   .role {
@@ -148,18 +71,12 @@
     text-transform: uppercase;
     color: #fff;
     margin-top: 1.2rem;
-    opacity: 0;
-    animation: riseIn 0.8s ease forwards;
-    animation-play-state: paused;
   }
 
   .socials {
     display: flex;
     gap: 2.5rem;
     margin-top: 2.2rem;
-    opacity: 0;
-    animation: riseIn 0.8s ease forwards;
-    animation-play-state: paused;
   }
 
   .socials a {
@@ -183,11 +100,6 @@
   .socials a:hover { color: #fff; }
   .socials a:hover::after { width: 100%; }
 
-  @keyframes riseIn {
-    from { opacity: 0; transform: translateY(18px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
   .scroll-cue {
     position: absolute;
     bottom: 2.5rem;
@@ -197,9 +109,6 @@
     flex-direction: column;
     align-items: center;
     gap: 0.6rem;
-    opacity: 0;
-    animation: riseIn 1s ease forwards;
-    animation-play-state: paused;
   }
   .scroll-cue span {
     font-size: 0.6rem;
@@ -212,7 +121,6 @@
     height: 48px;
     background: linear-gradient(to bottom, #fff, transparent);
     animation: pulse 2s ease-in-out infinite;
-    animation-play-state: paused;
   }
   @keyframes pulse {
     0%,100% { opacity: 0.2; transform: scaleY(0.8); }
