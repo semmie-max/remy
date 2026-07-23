@@ -269,13 +269,12 @@
 }
 
 .section-title {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 1rem;
-  font-weight: 300;
+  font-family: "Moirai One", system-ui;
+  font-size: 2rem;
+  font-weight: 400;
   color: #fff;
   margin-bottom: 2rem;
   letter-spacing: 0.05em;
-  font-family: 'Ewert', serif;
 }
 
 .project-list {
@@ -390,4 +389,11 @@
 
 .footer-contact:hover {
   color: rgba(255,255,255,0.6);
+}
+#row1, #row2 {
+  font-weight: 400;
+  font-size: clamp(3rem, 9vw, 7.5rem);
+  color: #fff;
+  line-height: 1;
+  font-family: "Moirai One", system-ui;
 }

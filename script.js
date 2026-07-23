@@ -1,11 +1,10 @@
 
-document.getElementById('row1').textContent = 'AREMOMHE';
-document.getElementById('row2').textContent = 'REMY';
+document.getElementById('row2').textContent = 'remomhe';
 
 
-// Last.fm Now Playing
-const LASTFM_USER = 'Rv3my'; // <-- replace this
-const LASTFM_API_KEY = '248965a0017aa3f8ee2ab5f4440785e8';       // <-- replace this
+
+const LASTFM_USER = 'Rv3my';
+const LASTFM_API_KEY = '248965a0017aa3f8ee2ab5f4440785e8';   
 
 async function fetchNowPlaying() {
   const url = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${LASTFM_USER}&api_key=${LASTFM_API_KEY}&format=json&limit=1`;
