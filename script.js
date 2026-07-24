@@ -112,6 +112,6 @@ window.addEventListener("scroll", () => {
 
     scrollTimeout = setTimeout(() => {
         nowPlaying.classList.remove("mini");
-    }, 300);
+    }, 3000);
 
 });
