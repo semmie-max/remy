@@ -147,6 +147,39 @@
   color: #fff;
   font-family: 'DM Sans', sans-serif;
   transition: opacity 0.3s ease;
+  transition:
+    width .35s ease,
+    height .35s ease,
+    padding .35s ease,
+    border-radius .35s ease,
+    left .35s ease,
+    bottom .35s ease,
+    transform .35s ease;
+}
+.now-playing.mini{
+  left: auto;
+  right: 1rem;
+  bottom: 1rem;
+
+  width: 70px;
+  height: 70px;
+  padding: 5px;
+
+  border-radius: 50%;
+  justify-content: center;
+}
+
+.now-playing.mini .np-info{
+  opacity: 0;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  margin: 0;
+}
+.now-playing.mini .np-album{
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
 }
 
 .now-playing.hidden {

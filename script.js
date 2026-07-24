@@ -98,3 +98,20 @@ const testiObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.3 });
 
 testiObserver.observe(document.getElementById('testimonials'));
+
+
+const nowPlaying = document.querySelector(".now-playing");
+
+let scrollTimeout;
+
+window.addEventListener("scroll", () => {
+
+    nowPlaying.classList.add("mini");
+
+    clearTimeout(scrollTimeout);
+
+    scrollTimeout = setTimeout(() => {
+        nowPlaying.classList.remove("mini");
+    }, 300);
+
+});
