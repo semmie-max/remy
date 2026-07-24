@@ -25,6 +25,14 @@ async function fetchNowPlaying() {
     document.getElementById('npTrack').textContent = track.name;
     document.getElementById('npArtist').textContent = track.artist['#text'];
 
+    if (!window.hasShownGreeting) {
+    window.hasShownGreeting = true;
+
+    setTimeout(() => {
+        showMessage("HI.", "");
+    }, 300);
+}
+
     const img = track.image.find(i => i.size === 'large')?.['#text'];
     const albumImg = document.getElementById('npAlbumArt');
     albumImg.src = img || '';
@@ -114,4 +122,44 @@ window.addEventListener("scroll", () => {
         nowPlaying.classList.remove("mini");
     }, 3000);
 
+});
+
+
+
+const npLabel = document.querySelector(".np-label");
+const npTrack = document.querySelector(".np-track");
+const npArtist = document.querySelector(".np-artist");
+
+const original = {
+    label: npLabel.textContent,
+    track: npTrack.textContent,
+    artist: npArtist.textContent
+};
+
+function showMessage(label, track, artist = "", duration = 2000) {
+
+    // Capture the CURRENT song details
+    const original = {
+        label: npLabel.textContent,
+        track: npTrack.textContent,
+        artist: npArtist.textContent
+    };
+
+    npLabel.textContent = label;
+    npTrack.textContent = track;
+    npArtist.textContent = artist;
+
+    setTimeout(() => {
+        npLabel.textContent = original.label;
+        npTrack.textContent = original.track;
+        npArtist.textContent = original.artist;
+    }, duration);
+}
+
+
+// Show "Welcome back" when the user returns
+document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) {
+        showMessage("WELCOME BACK",);
+    }
 });
