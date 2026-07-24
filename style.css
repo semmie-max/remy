@@ -241,26 +241,58 @@
   background: #000;
 }
 
-.tech-grid {
+.tech-mask{
+    overflow: hidden;
+    max-width: 200px;
+    margin: 0 auto;
+    display: flex;-webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 15%,
+    black 85%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 15%,
+    black 85%,
+    transparent 100%
+  );
+  }
+
+  .tech-grid {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 2rem;
-  justify-content: center;
-  max-width: 500px;
+  padding-right: 2rem;
+  flex-shrink: 0;
+  animation: techScroll 10s linear infinite;
+  will-change: transform;
+  transform: translateZ(0);
+}
+  .tech-grid img {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    opacity: 0.85;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    filter: grayscale(100%) brightness(200%);
+  }
+
+  .tech-grid img:hover {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+
+  @keyframes techScroll{
+  0%   { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-100%, 0, 0); }
 }
 
-.tech-grid img {
-  width: 22px;
-  height: 22px;
-  opacity: 0.85;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-  filter: grayscale(100%) brightness(200%);
-}
-
-.tech-grid img:hover {
-  opacity: 1;
-  transform: scale(1.15);
-}
+  @media (prefers-reduced-motion: reduce){
+    .tech-grid{ animation: none; }
+  }
 
 #projects {
   padding: 4rem 2rem;
