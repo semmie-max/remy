@@ -42,74 +42,115 @@
 
 
 
-
 /* Hide native scrollbar */
-::-webkit-scrollbar {
-    display: none;
+::-webkit-scrollbar{
+    display:none;
 }
 
-html {
-    scrollbar-width: none;
+html{
+    scrollbar-width:none;
 }
 
-/* Custom Scroll Indicator */
-#scrollIndicator {
-    position: fixed;
-    top: 10px;
-    right: 18px;
+/* Scroll indicator */
 
-    width: 10px;
-    height: 10px;
+#scrollIndicator{
 
-    border-radius: 50%;
-    background: #fff;
+    position:fixed;
 
-    opacity: 0;
-    z-index: 999999;
-    pointer-events: none;
+    top:10px;
+    right:18px;
+
+    width:14px;
+    height:14px;
+
+    display:flex;
+    justify-content:center;
+    align-items:flex-end;
+    gap:2px;
+
+    opacity:0;
+
+    pointer-events:none;
+
+    z-index:999999;
 
     transition:
-        opacity .3s ease,
-        width .35s ease,
-        height .35s ease,
-        border-radius .35s ease,
-        transform .1s linear;
+        opacity .3s,
+        top .1s linear;
+
 }
 
-/* Music Mode */
-#scrollIndicator.playing {
-    width: 6px;
-    height: 30px;
-    border-radius: 999px;
-    animation: musicPulse .45s ease-in-out infinite;
+/* Default dot */
+
+#scrollIndicator span{
+
+    display:none;
+
 }
 
-@keyframes musicPulse {
+/* Dot mode */
 
-    0%{
-        transform: scaleY(1);
-        opacity: .8;
+#scrollIndicator::before{
+
+    content:"";
+
+    width:10px;
+    height:10px;
+
+    background:#fff;
+
+    border-radius:50%;
+
+    display:block;
+
+}
+
+/* Music mode */
+
+#scrollIndicator.playing::before{
+
+    display:none;
+
+}
+
+#scrollIndicator.playing span{
+
+    display:block;
+
+    width:3px;
+
+    background:#fff;
+
+    border-radius:999px;
+
+    animation:eqBounce .7s ease-in-out infinite alternate;
+
+}
+
+#scrollIndicator.playing span:nth-child(2){
+
+    animation-delay:.2s;
+
+}
+
+#scrollIndicator.playing span:nth-child(3){
+
+    animation-delay:.4s;
+
+}
+
+@keyframes eqBounce{
+
+    from{
+
+        height:6px;
+
     }
 
-    20%{
-        transform: scaleY(1.8);
-    }
+    to{
 
-    40%{
-        transform: scaleY(.7);
-    }
+        height:18px;
 
-    60%{
-        transform: scaleY(2.2);
-    }
-
-    80%{
-        transform: scaleY(1.1);
-    }
-
-    100%{
-        transform: scaleY(1);
-        opacity: 1;
     }
 
 }

@@ -18,10 +18,12 @@ async function fetchNowPlaying() {
     const widget = document.getElementById('nowPlaying');
     if (!isPlaying) {
       widget.classList.add('hidden');
+      indicator.classList.remove("playing");
       return;
     }
 
     widget.classList.remove('hidden');
+    indicator.classList.add("playing");
     document.getElementById('npTrack').textContent = track.name;
     document.getElementById('npArtist').textContent = track.artist['#text'];
 
@@ -43,6 +45,7 @@ async function fetchNowPlaying() {
 
 fetchNowPlaying();
 setInterval(fetchNowPlaying, 5000); // refresh every 5s
+
 
 const testimonials = [
   {

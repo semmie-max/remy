@@ -24,10 +24,15 @@
 
 
 
-
-// Create the scrollbar automatically
 const indicator = document.createElement("div");
 indicator.id = "scrollIndicator";
+
+indicator.innerHTML = `
+    <span></span>
+    <span></span>
+    <span></span>
+`;
+
 document.body.appendChild(indicator);
 
 let hideTimer;
@@ -37,18 +42,19 @@ function updateScrollIndicator() {
     const maxScroll =
         document.documentElement.scrollHeight - window.innerHeight;
 
-    if (maxScroll <= 0) return;
+    if(maxScroll <= 0) return;
 
     const progress = window.scrollY / maxScroll;
 
     const travel =
-        window.innerHeight - indicator.offsetHeight - 20;
+        window.innerHeight - 80;
 
-    indicator.style.transform =
-        `translateY(${progress * travel}px)`;
+    indicator.style.top =
+        `${10 + progress * travel}px`;
+
 }
 
-window.addEventListener("scroll", () => {
+window.addEventListener("scroll",()=>{
 
     updateScrollIndicator();
 
@@ -56,11 +62,11 @@ window.addEventListener("scroll", () => {
 
     clearTimeout(hideTimer);
 
-    hideTimer = setTimeout(() => {
+    hideTimer = setTimeout(()=>{
 
         indicator.style.opacity = "0";
 
-    }, 1000);
+    },1000);
 
 });
 
