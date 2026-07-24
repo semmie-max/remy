@@ -21,3 +21,47 @@
     setTimeout(() => loader.remove(), 500);
   });
 })();
+
+
+
+
+// Create the scrollbar automatically
+const indicator = document.createElement("div");
+indicator.id = "scrollIndicator";
+document.body.appendChild(indicator);
+
+let hideTimer;
+
+function updateScrollIndicator() {
+
+    const maxScroll =
+        document.documentElement.scrollHeight - window.innerHeight;
+
+    if (maxScroll <= 0) return;
+
+    const progress = window.scrollY / maxScroll;
+
+    const travel =
+        window.innerHeight - indicator.offsetHeight - 20;
+
+    indicator.style.transform =
+        `translateY(${progress * travel}px)`;
+}
+
+window.addEventListener("scroll", () => {
+
+    updateScrollIndicator();
+
+    indicator.style.opacity = "1";
+
+    clearTimeout(hideTimer);
+
+    hideTimer = setTimeout(() => {
+
+        indicator.style.opacity = "0";
+
+    }, 1000);
+
+});
+
+updateScrollIndicator();
