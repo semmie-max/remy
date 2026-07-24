@@ -78,14 +78,38 @@ html {
 
 /* Music Mode */
 #scrollIndicator.playing {
-    width: 5px;
-    height: 42px;
+    width: 6px;
+    height: 30px;
     border-radius: 999px;
-    animation: musicPulse .9s ease-in-out infinite;
+    animation: musicPulse .45s ease-in-out infinite;
 }
 
 @keyframes musicPulse {
-    0%   { height: 36px; }
-    50%  { height: 50px; }
-    100% { height: 36px; }
+
+    0%{
+        transform: scaleY(1);
+        opacity: .8;
+    }
+
+    20%{
+        transform: scaleY(1.8);
+    }
+
+    40%{
+        transform: scaleY(.7);
+    }
+
+    60%{
+        transform: scaleY(2.2);
+    }
+
+    80%{
+        transform: scaleY(1.1);
+    }
+
+    100%{
+        transform: scaleY(1);
+        opacity: 1;
+    }
+
 }
