@@ -44,7 +44,7 @@ async function fetchNowPlaying() {
 }
 
 fetchNowPlaying();
-setInterval(fetchNowPlaying, 5000); // refresh every 5s
+setInterval(fetchNowPlaying, 5000);
 
 
 const testimonials = [
@@ -141,7 +141,6 @@ const original = {
 
 function showMessage(label, track, artist = "", duration = 2000) {
 
-    // Capture the CURRENT song details
     const original = {
         label: npLabel.textContent,
         track: npTrack.textContent,
@@ -160,7 +159,6 @@ function showMessage(label, track, artist = "", duration = 2000) {
 }
 
 
-// Show "Welcome back" when the user returns
 document.addEventListener("visibilitychange", () => {
     if (!document.hidden) {
         showMessage("WELCOME BACK",);

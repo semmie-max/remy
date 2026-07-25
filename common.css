@@ -10,7 +10,6 @@
   display: flex;
   align-items: center;
 }
-
 .bar {
   display: inline-block;
   width: 3px;
@@ -39,10 +38,6 @@
     transform: scaleY(1);
   }
 }
-
-
-
-/* Hide native scrollbar */
 ::-webkit-scrollbar{
     display:none;
 }
@@ -51,106 +46,63 @@ html{
     scrollbar-width:none;
 }
 
-/* Scroll indicator */
 
 #scrollIndicator{
-
-    position:fixed;
-
-    top:10px;
-    right:18px;
-
-    width:14px;
-    height:14px;
-
-    display:flex;
-    justify-content:center;
-    align-items:flex-end;
-    gap:2px;
-
-    opacity:0;
-
-    pointer-events:none;
-
-    z-index:999999;
-
-    transition:
+  position:fixed;
+  top:10px;
+  right:18px;
+  width:14px;
+  height:14px;
+  display:flex;
+  justify-content:center;
+  align-items:flex-end;
+  gap:2px;
+  opacity:0;
+  pointer-events:none;
+  z-index:999999;
+  transition:
         opacity .3s,
         top .1s linear;
-
 }
-
-/* Default dot */
 
 #scrollIndicator span{
-
-    display:none;
-
+  display:none;
 }
-
-/* Dot mode */
 
 #scrollIndicator::before{
-
-    content:"";
-
-    width:10px;
-    height:10px;
-
-    background:#fff;
-
-    border-radius:50%;
-
-    display:block;
-
+  content:"";
+  width:10px;
+  height:10px;
+  background:#fff;
+  border-radius:50%;
+  display:block;
 }
 
-/* Music mode */
-
 #scrollIndicator.playing::before{
-
-    display:none;
-
+  display:none;
 }
 
 #scrollIndicator.playing span{
-
-    display:block;
-
-    width:3px;
-
-    background:#fff;
-
-    border-radius:999px;
-
-    animation:eqBounce .7s ease-in-out infinite alternate;
-
+  display:block;
+  width:3px;
+  background:#fff;
+  border-radius:999px;
+  animation:eqBounce .7s ease-in-out infinite alternate;
 }
 
 #scrollIndicator.playing span:nth-child(2){
-
-    animation-delay:.2s;
-
+  animation-delay:.2s;
 }
 
 #scrollIndicator.playing span:nth-child(3){
-
-    animation-delay:.4s;
-
+  animation-delay:.4s;
 }
 
 @keyframes eqBounce{
-
-    from{
-
-        height:6px;
-
-    }
-
-    to{
-
-        height:18px;
-
-    }
-
+  from{
+    height:6px;
+  }
+  to{
+    height:18px;
+  }
 }

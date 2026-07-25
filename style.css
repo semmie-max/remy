@@ -203,7 +203,7 @@
   display: block;
 }
 
-/* EQ bars overlay on the album */
+
 .np-eq {
   position: absolute;
   bottom: 6px;
@@ -485,6 +485,3 @@
   transform: rotate(-2deg);
   transform-origin: left;
 }
-
-
-
