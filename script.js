@@ -50,11 +50,11 @@ setInterval(fetchNowPlaying, 5000);
 const testimonials = [
   {
     text: "Software is one of the few places where imagination can become something functional.",
-    name: "Discovered while building"
+    name: "this resonates with me sm idk"
   },
   {
     text: "a move that looks useless sometimes is the most important move on the board  ",
-    name: "A good game of chess is always welcome"
+    name: "A good game of chess is always welcome. hmu please"
   },
   {
     text: "Studying how spacecraft trajectories are calculated when both the spacecraft and target body are following paths through space.",
@@ -62,11 +62,11 @@ const testimonials = [
   },
   {
     text: "Some puzzles require proving that no solution exsts ",
-    name: "i think this is weid but true"
+    name: "i think this is weird but true"
   },
   {
     text: "How do engineers calculate the exact path a spacecraft must follow when travelling through space while accounting for orbital transfers, gravitational influences, and the movement of celestial bodies?",
-    name: "Learning about orbital mechanics, trajectory calculations, and the mathematics required for precision space missions."
+    name: "randomly thought of this"
   },
   {
     text: "I know i'm going to be a really cracked engineer",
