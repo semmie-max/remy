@@ -49,16 +49,32 @@ setInterval(fetchNowPlaying, 5000);
 
 const testimonials = [
   {
-    text: "Remomhe stands out because of her ability to deliver exactly what you asked for, she's a top notch communicator and a very versatile developer.",
-    name: "— CEO of tulips and roses"
+    text: "Software is one of the few places where imagination can become something functional.",
+    name: "Discovered while building"
   },
   {
-    text: "One of the most detail-oriented developers I've worked with.",
-    name: "— StayWoke Luxury"
+    text: "a move that looks useless sometimes is the most important move on the board  ",
+    name: "A good game of chess is always welcome"
   },
   {
-    text: "You don't fully believe it until you experience it yourself. Remy never disappoints",
-    name: "— Undisclosed"
+    text: "Studying how spacecraft trajectories are calculated when both the spacecraft and target body are following paths through space.",
+    name: "Learning about orbital transfers, gravitational influences, and the mathematics required for precision space missions."
+  },
+  {
+    text: "Some puzzles require proving that no solution exsts ",
+    name: "i think this is weid but true"
+  },
+  {
+    text: "How do engineers calculate the exact path a spacecraft must follow when travelling through space while accounting for orbital transfers, gravitational influences, and the movement of celestial bodies?",
+    name: "Learning about orbital mechanics, trajectory calculations, and the mathematics required for precision space missions."
+  },
+  {
+    text: "I know i'm going to be a really cracked engineer",
+    name: "dreams fr."
+  },
+  {
+    text: "Machines can process information, but humans create meaning, ideas, and innovation.",
+    name: "ai cannot replace"
   }
 ];
 
