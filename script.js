@@ -1,6 +1,9 @@
 
 const row2El = document.getElementById('row2');
-if (row2El) row2El.textContent = 'remomhe';
+
+if (row2El) {
+
+row2El.textContent = 'remomhe';
 
 
 
@@ -455,6 +458,8 @@ lyricsOverlay.addEventListener('click', (e) => {
 lyricsOverlay.querySelector('.lyrics-close').addEventListener('click', closeLyrics);
 
 document.getElementById('nowPlaying').addEventListener('click', openLyrics);
+
+} // end homepage-only code
 
 
 // ===================================================================
