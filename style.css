@@ -181,6 +181,12 @@
   width: 60px;
   height: 60px;
   border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.now-playing.mini .np-eq {
+  display: none;
 }
 
 .now-playing.hidden {
