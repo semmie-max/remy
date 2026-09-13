@@ -711,9 +711,11 @@
 .frag-hero {
   min-height: 160vh; /* extra scroll room so the reveal has space to happen */
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   padding: 4rem 2rem;
+  padding-top: 12vh;
   background: #000;
   box-sizing: border-box;
 }
@@ -722,15 +724,16 @@
   box-sizing: border-box;
 }
 
-.frag-text {
+.frag-line {
   max-width: 700px;
+  width: 100%;
   font-family: 'DM Sans', sans-serif;
   font-size: clamp(1.3rem, 3vw, 2.1rem);
   line-height: 1.7;
   font-weight: 300;
   color: #fff;
   text-align: left;
-  margin: 0;
+  margin: 0 0 1rem 0;
 
   /* starting state: fully blurred, dimmed a touch so it reads as "not yet in focus" */
   filter: blur(14px);
