@@ -577,3 +577,48 @@
   color: rgba(255,255,255,0.4);
   font-style: italic;
 }
+
+.lyrics-body {
+  white-space: normal;
+}
+
+.lyrics-line {
+  padding: 0.4rem 0;
+  opacity: 0.35;
+  transition: opacity 0.3s ease, transform 0.3s ease, color 0.3s ease;
+  font-size: 0.95rem;
+}
+
+.lyrics-line.active {
+  opacity: 1;
+  color: #fff;
+  font-weight: 600;
+  transform: scale(1.03);
+  transform-origin: left;
+}
+
+.lyrics-progress-wrap {
+  margin-bottom: 1.5rem;
+}
+
+.lyrics-progress-bar {
+  height: 3px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.lyrics-progress-fill {
+  height: 100%;
+  background: #fff;
+  width: 0%;
+  transition: width 0.5s linear;
+}
+
+.lyrics-time {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.65rem;
+  opacity: 0.4;
+  margin-top: 0.3rem;
+}

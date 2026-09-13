@@ -190,6 +190,15 @@ lyricsOverlay.innerHTML = `
       <p class="lyrics-track" id="lyricsTrack"></p>
       <p class="lyrics-artist" id="lyricsArtist"></p>
     </div>
+    <div class="lyrics-progress-wrap" id="lyricsProgressWrap" style="display:none;">
+      <div class="lyrics-progress-bar">
+        <div class="lyrics-progress-fill" id="lyricsProgressFill"></div>
+      </div>
+      <div class="lyrics-time">
+        <span id="lyricsElapsed">0:00</span>
+        <span id="lyricsDuration">0:00</span>
+      </div>
+    </div>
     <div class="lyrics-body" id="lyricsBody"></div>
   </div>
 `;
@@ -198,6 +207,155 @@ document.body.appendChild(lyricsOverlay);
 const lyricsBody = document.getElementById('lyricsBody');
 const lyricsTrackEl = document.getElementById('lyricsTrack');
 const lyricsArtistEl = document.getElementById('lyricsArtist');
+const lyricsProgressWrap = document.getElementById('lyricsProgressWrap');
+const lyricsProgressFill = document.getElementById('lyricsProgressFill');
+const lyricsElapsedEl = document.getElementById('lyricsElapsed');
+const lyricsDurationEl = document.getElementById('lyricsDuration');
+
+let syncedLines = [];
+let songDuration = 0;
+let elapsedSeconds = 0;
+let playbackTimer = null;
+
+function formatTime(sec) {
+  const m = Math.floor(sec / 60);
+  const s = Math.floor(sec % 60).toString().padStart(2, '0');
+  return `${m}:${s}`;
+}
+
+function parseLRC(lrcText) {
+  const lines = lrcText.split('\n');
+  const result = [];
+  const timeTag = /\[(\d{2}):(\d{2})\.(\d{2,3})\]/g;
+
+  lines.forEach(line => {
+    const matches = [...line.matchAll(timeTag)];
+    if (matches.length === 0) return;
+    const text = line.replace(timeTag, '').trim();
+    matches.forEach(m => {
+      const minutes = parseInt(m[1]);
+      const seconds = parseInt(m[2]);
+      const ms = parseInt(m[3].padEnd(3, '0'));
+      const time = minutes * 60 + seconds + ms / 1000;
+      result.push({ time, text });
+    });
+  });
+
+  return result.sort((a, b) => a.time - b.time);
+}
+
+function renderStaticLyrics(text) {
+  lyricsBody.innerHTML = '';
+  const p = document.createElement('p');
+  p.textContent = text;
+  p.style.whiteSpace = 'pre-wrap';
+  lyricsBody.appendChild(p);
+}
+
+function renderSyncedLyrics() {
+  lyricsBody.innerHTML = '';
+  syncedLines.forEach((line, i) => {
+    const el = document.createElement('div');
+    el.className = 'lyrics-line';
+    el.textContent = line.text || '\u00A0';
+    el.dataset.index = i;
+    lyricsBody.appendChild(el);
+  });
+}
+
+function updateActiveLine() {
+  if (syncedLines.length === 0) return;
+
+  let activeIndex = 0;
+  for (let i = 0; i < syncedLines.length; i++) {
+    if (syncedLines[i].time <= elapsedSeconds) {
+      activeIndex = i;
+    } else {
+      break;
+    }
+  }
+
+  const allLines = lyricsBody.querySelectorAll('.lyrics-line');
+  allLines.forEach(el => el.classList.remove('active'));
+  const activeEl = allLines[activeIndex];
+  if (activeEl) {
+    activeEl.classList.add('active');
+    activeEl.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  }
+}
+
+function updateProgressBar() {
+  if (songDuration > 0) {
+    const pct = Math.min((elapsedSeconds / songDuration) * 100, 100);
+    lyricsProgressFill.style.width = pct + '%';
+  }
+  lyricsElapsedEl.textContent = formatTime(elapsedSeconds);
+  lyricsDurationEl.textContent = formatTime(songDuration);
+}
+
+function startPlaybackTimer() {
+  stopPlaybackTimer();
+  elapsedSeconds = 0;
+  playbackTimer = setInterval(() => {
+    elapsedSeconds += 0.5;
+    if (songDuration > 0 && elapsedSeconds > songDuration) {
+      elapsedSeconds = songDuration;
+    }
+    updateProgressBar();
+    updateActiveLine();
+  }, 500);
+}
+
+function stopPlaybackTimer() {
+  if (playbackTimer) {
+    clearInterval(playbackTimer);
+    playbackTimer = null;
+  }
+}
+
+async function fetchLyrics(artist, track) {
+  syncedLines = [];
+  songDuration = 0;
+  lyricsProgressWrap.style.display = 'none';
+  stopPlaybackTimer();
+
+  try {
+    const searchUrl = `https://lrclib.net/api/search?artist_name=${encodeURIComponent(artist)}&track_name=${encodeURIComponent(track)}`;
+    const res = await fetch(searchUrl);
+    const results = await res.json();
+
+    const match = results.find(r => r.syncedLyrics) || results[0];
+
+    if (match && match.syncedLyrics) {
+      syncedLines = parseLRC(match.syncedLyrics);
+      songDuration = match.duration || 0;
+
+      if (syncedLines.length > 0) {
+        renderSyncedLyrics();
+        lyricsProgressWrap.style.display = 'block';
+        updateProgressBar();
+        startPlaybackTimer();
+        return;
+      }
+    }
+
+    if (match && match.plainLyrics) {
+      renderStaticLyrics(match.plainLyrics.trim());
+      return;
+    }
+
+    const fallbackRes = await fetch(`https://api.lyrics.ovh/v1/${encodeURIComponent(artist)}/${encodeURIComponent(track)}`);
+    const fallbackData = await fallbackRes.json();
+
+    if (fallbackData.lyrics) {
+      renderStaticLyrics(fallbackData.lyrics.trim());
+    } else {
+      lyricsBody.innerHTML = '<p class="lyrics-body empty">No lyrics found for this track.</p>';
+    }
+  } catch (e) {
+    lyricsBody.innerHTML = '<p class="lyrics-body empty">Could not load lyrics right now.</p>';
+  }
+}
 
 function openLyrics() {
   const track = document.getElementById('npTrack').textContent;
@@ -207,8 +365,7 @@ function openLyrics() {
 
   lyricsTrackEl.textContent = track;
   lyricsArtistEl.textContent = artist;
-  lyricsBody.textContent = 'Loading lyrics...';
-  lyricsBody.className = 'lyrics-body loading';
+  lyricsBody.innerHTML = '<p class="lyrics-body loading">Loading lyrics...</p>';
   lyricsOverlay.classList.add('visible');
 
   fetchLyrics(artist, track);
@@ -216,29 +373,12 @@ function openLyrics() {
 
 function closeLyrics() {
   lyricsOverlay.classList.remove('visible');
+  stopPlaybackTimer();
 }
 
 lyricsOverlay.addEventListener('click', (e) => {
   if (e.target === lyricsOverlay) closeLyrics();
 });
 lyricsOverlay.querySelector('.lyrics-close').addEventListener('click', closeLyrics);
-
-async function fetchLyrics(artist, track) {
-  try {
-    const res = await fetch(`https://api.lyrics.ovh/v1/${encodeURIComponent(artist)}/${encodeURIComponent(track)}`);
-    const data = await res.json();
-
-    if (data.lyrics) {
-      lyricsBody.textContent = data.lyrics.trim();
-      lyricsBody.className = 'lyrics-body';
-    } else {
-      lyricsBody.textContent = 'No lyrics found for this track.';
-      lyricsBody.className = 'lyrics-body empty';
-    }
-  } catch (e) {
-    lyricsBody.textContent = 'Could not load lyrics right now.';
-    lyricsBody.className = 'lyrics-body empty';
-  }
-}
 
 document.getElementById('nowPlaying').addEventListener('click', openLyrics);
