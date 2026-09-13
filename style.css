@@ -519,10 +519,10 @@
   background: #0a0a0a;
   border: 1px solid rgba(255,255,255,0.1);
   border-radius: 16px;
-  max-width: 420px;
+  max-width: 260px;
   width: 90%;
-  max-height: 80vh;
-  padding: 2rem;
+  max-height: 60vh;
+  padding: 1rem;
   position: relative;
   overflow-y: auto;
   transform: translateY(20px);
@@ -542,12 +542,12 @@
 }
 
 .lyrics-art-wrap {
-  width: 120px;
-  height: 120px;
-  border-radius: 12px;
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
   overflow: hidden;
   flex-shrink: 0;
-  box-shadow: 0 12px 30px rgba(0,0,0,0.5);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.5);
 }
 
 .lyrics-art {
@@ -595,14 +595,14 @@
 .lyrics-header .lyrics-track {
   font-family: 'DM Sans', sans-serif;
   font-weight: 600;
-  font-size: 1.1rem;
+  font-size: 0.85rem;
   color: #fff;
-  margin: 0 0 0.2rem;
+  margin: 0 0 0.1rem;
 }
 
 .lyrics-header .lyrics-artist {
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.8rem;
+  font-size: 0.65rem;
   color: rgba(255,255,255,0.5);
   margin: 0;
 }
@@ -628,7 +628,7 @@
 .lyrics-body {
   position: relative;
   overflow: hidden;
-  height: 220px;
+  height: 120px;
   width: 100%;
   display: flex;
   align-items: center;
@@ -649,9 +649,9 @@
 
 .lyrics-line {
   font-family: 'DM Sans', sans-serif;
-  font-size: 1.15rem;
+  font-size: 0.85rem;
   font-weight: 700;
-  line-height: 2.6rem;
+  line-height: 1.8rem;
 }
 
 .word {
@@ -659,7 +659,7 @@
   transition: color 0.3s ease;
 }
 
-.word.sung {
+.lyrics-line.current .word {
   color: #fff;
 }
 
