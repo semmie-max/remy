@@ -782,11 +782,12 @@
 }
 
 .frag-note {
-  width: auto;
+  max-width: 700px;
+  width: 100%;
   margin-top: 2rem;
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: center;
   gap: 2rem;
   pointer-events: none;
 }
@@ -798,51 +799,42 @@
   flex-shrink: 0;
 }
 
-.frag-note-photos {
-  position: relative;
-  width: 340px;
-  height: 300px;
+.frag-note-image {
+  width: 220px;
+  height: 220px;
+  max-width: 100%;
+  border: 2px dashed rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  overflow: hidden;
   flex-shrink: 0;
   pointer-events: auto;
 }
 
-.frag-polaroid {
-  position: absolute;
-  width: 220px;
-  background: #fff;
-  padding: 10px 10px 34px;
-  border-radius: 4px;
-  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.55);
-}
-
-.frag-polaroid img {
+.frag-note-image img {
   width: 100%;
-  height: 240px;
+  height: 100%;
   object-fit: cover;
   display: block;
-  border-radius: 2px;
 }
 
-.frag-polaroid-caption {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.75rem;
-  color: #111;
-  text-align: center;
-  margin: 12px 0 0;
-}
+@media (max-width: 600px) {
+  .frag-note {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
 
-.frag-polaroid-1 {
-  top: 0;
-  left: 0;
-  transform: rotate(-8deg);
-  z-index: 1;
-}
+  .frag-note-label {
+    align-items: center;
+    text-align: center;
+  }
 
-.frag-polaroid-2 {
-  top: 24px;
-  left: 120px;
-  transform: rotate(7deg);
-  z-index: 2;
+  .frag-note-image {
+    width: 70vw;
+    height: 70vw;
+    max-width: 260px;
+    max-height: 260px;
+  }
 }
 
 .frag-note-text {
