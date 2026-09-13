@@ -350,8 +350,11 @@ function updateActiveLine() {
     words.forEach(w => w.classList.toggle('sung', i === activeIndex));
   });
 
-  const lineHeight = lines[0]?.offsetHeight || 40;
-  const offset = -(activeIndex * lineHeight) + (lyricsBody.clientHeight / 2 - lineHeight / 2);
+  const activeEl = lines[activeIndex];
+  const activeHeight = activeEl ? activeEl.offsetHeight : (lines[0]?.offsetHeight || 40);
+  const offset = activeEl
+    ? -(activeEl.offsetTop) + (lyricsBody.clientHeight / 2 - activeHeight / 2)
+    : 0;
   track.style.transform = `translateY(${offset}px)`;
 }
 
