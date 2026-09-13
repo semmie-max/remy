@@ -49,9 +49,11 @@ pollSpotifyProgress();
 setInterval(pollSpotifyProgress, 3000);
 
 function getCurrentProgressSeconds() {
-  if (!livePlayback.is_playing) return livePlayback.progress_ms / 1000;
+  const base = Number(livePlayback.progress_ms);
+  if (!Number.isFinite(base)) return null;
+  if (!livePlayback.is_playing) return base / 1000;
   const drift = (Date.now() - livePlayback.lastFetch) / 1000;
-  return (livePlayback.progress_ms / 1000) + drift;
+  return (base / 1000) + drift;
 }
 
 async function fetchNowPlaying() {
@@ -347,7 +349,7 @@ function updateActiveLine() {
     const words = el.querySelectorAll('.word');
     words.forEach(w => w.classList.toggle('sung', i === activeIndex));
   });
-  
+
   const lineHeight = lines[0]?.offsetHeight || 40;
   const offset = -(activeIndex * lineHeight) + (lyricsBody.clientHeight / 2 - lineHeight / 2);
   track.style.transform = `translateY(${offset}px)`;
@@ -355,9 +357,17 @@ function updateActiveLine() {
 
 function startPlaybackTimer() {
   stopPlaybackTimer();
-  elapsedSeconds = getCurrentProgressSeconds();
+  const initial = getCurrentProgressSeconds();
+  elapsedSeconds = initial !== null ? initial : 0;
+  let localStart = Date.now() - elapsedSeconds * 1000;
   playbackTimer = setInterval(() => {
-    elapsedSeconds = getCurrentProgressSeconds();
+    const live = getCurrentProgressSeconds();
+    if (live !== null) {
+      elapsedSeconds = live;
+      localStart = Date.now() - elapsedSeconds * 1000;
+    } else {
+      elapsedSeconds = (Date.now() - localStart) / 1000;
+    }
     if (songDuration > 0 && elapsedSeconds > songDuration) {
       elapsedSeconds = songDuration;
     }
