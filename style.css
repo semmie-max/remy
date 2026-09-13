@@ -701,3 +701,39 @@
   from { height: 4px; }
   to   { height: 20px; }
 }
+
+/* ===================================================================
+   ===== Fragments page: scroll-blur text section (added below) =====
+   Scoped to .frag- classes only — does not touch *, html, or body,
+   so it does not affect any of the rules above.
+   =================================================================== */
+
+.frag-hero {
+  min-height: 160vh; /* extra scroll room so the reveal has space to happen */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  background: #000;
+  box-sizing: border-box;
+}
+
+.frag-hero * {
+  box-sizing: border-box;
+}
+
+.frag-text {
+  max-width: 700px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: clamp(1.3rem, 3vw, 2.1rem);
+  line-height: 1.7;
+  font-weight: 300;
+  color: #fff;
+  text-align: left;
+  margin: 0;
+
+  /* starting state: fully blurred, dimmed a touch so it reads as "not yet in focus" */
+  filter: blur(14px);
+  opacity: 0.4;
+  will-change: filter, opacity;
+}
