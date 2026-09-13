@@ -583,19 +583,24 @@
 }
 
 .lyrics-body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  height: 140px;
   text-align: center;
-  min-height: 140px;
-  gap: 0.8rem;
+}
+
+.lyrics-track {
+  position: relative;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
 }
 
 .lyrics-line {
   font-size: 0.9rem;
-  opacity: 0.3;
-  transition: all 0.4s ease;
+  opacity: 0.25;
+  line-height: 2.4rem;
+  transform: scale(0.92);
+  transition: opacity 0.4s ease, font-size 0.4s ease, color 0.4s ease, transform 0.4s ease;
 }
 
 .lyrics-line.current {
@@ -603,6 +608,7 @@
   font-weight: 600;
   opacity: 1;
   color: #fff;
+  transform: scale(1);
 }
 
 .lyrics-progress-wrap {

@@ -275,11 +275,14 @@ function renderStaticLyrics(text) {
 }
 
 function renderSyncedLyrics() {
-  lyricsBody.innerHTML = `
-    <div class="lyrics-line prev" id="lyricsPrev"></div>
-    <div class="lyrics-line current" id="lyricsCurrent"></div>
-    <div class="lyrics-line next" id="lyricsNext"></div>
-  `;
+  lyricsBody.innerHTML = `<div class="lyrics-track" id="lyricsTrackWrap"></div>`;
+  const track = document.getElementById('lyricsTrackWrap');
+  syncedLines.forEach((line) => {
+    const div = document.createElement('div');
+    div.className = 'lyrics-line';
+    div.textContent = line.text || '\u00A0';
+    track.appendChild(div);
+  });
 }
 
 function updateActiveLine() {
@@ -294,15 +297,17 @@ function updateActiveLine() {
     }
   }
 
-  const prevEl = document.getElementById('lyricsPrev');
-  const currentEl = document.getElementById('lyricsCurrent');
-  const nextEl = document.getElementById('lyricsNext');
+  const track = document.getElementById('lyricsTrackWrap');
+  if (!track) return;
 
-  if (!prevEl || !currentEl || !nextEl) return;
+  const lines = track.querySelectorAll('.lyrics-line');
+  lines.forEach((el, i) => {
+    el.classList.toggle('current', i === activeIndex);
+  });
 
-  prevEl.textContent = syncedLines[activeIndex - 1]?.text || '';
-  currentEl.textContent = syncedLines[activeIndex]?.text || '';
-  nextEl.textContent = syncedLines[activeIndex + 1]?.text || '';
+  const lineHeight = lines[0]?.offsetHeight || 40;
+  const offset = -(activeIndex * lineHeight) + (lyricsBody.clientHeight / 2 - lineHeight / 2);
+  track.style.transform = `translateY(${offset}px)`;
 }
 
 function updateProgressBar() {
