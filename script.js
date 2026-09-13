@@ -590,6 +590,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!board || !form) return;
 
+  const SIGN_API = 'https://now-playing-proxy.aremomheremy.workers.dev';
+
   let selectedColor = '#1a1a1a';
 
   inkDots.forEach((dot, i) => {
@@ -614,34 +616,38 @@ document.addEventListener("DOMContentLoaded", () => {
     board.appendChild(el);
   }
 
-  function loadSignatures() {
-    const saved = JSON.parse(localStorage.getItem('boardSignatures') || '[]');
-    saved.forEach(renderSignature);
+  async function loadSignatures() {
+    try {
+      const res = await fetch(`${SIGN_API}/signatures`);
+      const signatures = await res.json();
+      signatures.forEach(renderSignature);
+    } catch (e) {
+      console.error('Failed to load signatures', e);
+    }
   }
 
-  function saveSignature(sig) {
-    const saved = JSON.parse(localStorage.getItem('boardSignatures') || '[]');
-    saved.push(sig);
-    localStorage.setItem('boardSignatures', JSON.stringify(saved));
-  }
-
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const text = input.value.trim();
     if (!text) return;
 
-    const sig = {
-      text,
-      color: selectedColor,
-      x: Math.random() * 70 + 5,   // 5%–75% from left
-      y: Math.random() * 75 + 5,   // 5%–80% from top
-      rot: Math.random() * 16 - 8, // -8deg to 8deg
-      size: (Math.random() * 0.4 + 0.9).toFixed(2) // 0.9–1.3rem
-    };
-
-    renderSignature(sig);
-    saveSignature(sig);
     input.value = '';
+
+    try {
+      const res = await fetch(`${SIGN_API}/sign`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, color: selectedColor })
+      });
+      const sig = await res.json();
+      if (sig.error) {
+        console.error('Sign failed', sig.error);
+        return;
+      }
+      renderSignature(sig);
+    } catch (e) {
+      console.error('Failed to sign', e);
+    }
   });
 
   loadSignatures();
