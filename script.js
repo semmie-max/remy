@@ -180,3 +180,65 @@ document.addEventListener("visibilitychange", () => {
         showMessage("WELCOME BACK",);
     }
 });
+
+const lyricsOverlay = document.createElement('div');
+lyricsOverlay.className = 'lyrics-overlay';
+lyricsOverlay.innerHTML = `
+  <div class="lyrics-panel">
+    <button class="lyrics-close" aria-label="Close">&times;</button>
+    <div class="lyrics-header">
+      <p class="lyrics-track" id="lyricsTrack"></p>
+      <p class="lyrics-artist" id="lyricsArtist"></p>
+    </div>
+    <div class="lyrics-body" id="lyricsBody"></div>
+  </div>
+`;
+document.body.appendChild(lyricsOverlay);
+
+const lyricsBody = document.getElementById('lyricsBody');
+const lyricsTrackEl = document.getElementById('lyricsTrack');
+const lyricsArtistEl = document.getElementById('lyricsArtist');
+
+function openLyrics() {
+  const track = document.getElementById('npTrack').textContent;
+  const artist = document.getElementById('npArtist').textContent;
+
+  if (!track || track === '—') return;
+
+  lyricsTrackEl.textContent = track;
+  lyricsArtistEl.textContent = artist;
+  lyricsBody.textContent = 'Loading lyrics...';
+  lyricsBody.className = 'lyrics-body loading';
+  lyricsOverlay.classList.add('visible');
+
+  fetchLyrics(artist, track);
+}
+
+function closeLyrics() {
+  lyricsOverlay.classList.remove('visible');
+}
+
+lyricsOverlay.addEventListener('click', (e) => {
+  if (e.target === lyricsOverlay) closeLyrics();
+});
+lyricsOverlay.querySelector('.lyrics-close').addEventListener('click', closeLyrics);
+
+async function fetchLyrics(artist, track) {
+  try {
+    const res = await fetch(`https://api.lyrics.ovh/v1/${encodeURIComponent(artist)}/${encodeURIComponent(track)}`);
+    const data = await res.json();
+
+    if (data.lyrics) {
+      lyricsBody.textContent = data.lyrics.trim();
+      lyricsBody.className = 'lyrics-body';
+    } else {
+      lyricsBody.textContent = 'No lyrics found for this track.';
+      lyricsBody.className = 'lyrics-body empty';
+    }
+  } catch (e) {
+    lyricsBody.textContent = 'Could not load lyrics right now.';
+    lyricsBody.className = 'lyrics-body empty';
+  }
+}
+
+document.getElementById('nowPlaying').addEventListener('click', openLyrics);

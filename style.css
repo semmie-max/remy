@@ -485,3 +485,95 @@
   transform: rotate(-2deg);
   transform-origin: left;
 }
+
+.now-playing {
+  cursor: pointer;
+}
+
+.lyrics-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.lyrics-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.lyrics-panel {
+  background: #0a0a0a;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 75vh;
+  padding: 2rem;
+  position: relative;
+  overflow-y: auto;
+  transform: translateY(20px);
+  transition: transform 0.3s ease;
+}
+
+.lyrics-overlay.visible .lyrics-panel {
+  transform: translateY(0);
+}
+
+.lyrics-close {
+  position: absolute;
+  top: 1rem;
+  right: 1.2rem;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+}
+
+.lyrics-close:hover {
+  opacity: 1;
+}
+
+.lyrics-header {
+  margin-bottom: 1.5rem;
+}
+
+.lyrics-header .lyrics-track {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #fff;
+  margin: 0 0 0.2rem;
+}
+
+.lyrics-header .lyrics-artist {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.5);
+  margin: 0;
+}
+
+.lyrics-body {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  line-height: 1.9;
+  color: rgba(255,255,255,0.85);
+  white-space: pre-wrap;
+}
+
+.lyrics-body.loading,
+.lyrics-body.empty {
+  color: rgba(255,255,255,0.4);
+  font-style: italic;
+}
