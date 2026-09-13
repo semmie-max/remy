@@ -216,12 +216,8 @@ lyricsOverlay.innerHTML = `
       <p class="lyrics-artist" id="lyricsArtist"></p>
     </div>
     <div class="lyrics-progress-wrap" id="lyricsProgressWrap" style="display:none;">
-      <div class="lyrics-progress-bar">
-        <div class="lyrics-progress-fill" id="lyricsProgressFill"></div>
-      </div>
-      <div class="lyrics-time">
-        <span id="lyricsElapsed">0:00</span>
-        <span id="lyricsDuration">0:00</span>
+      <div class="lyrics-eq">
+        <span></span><span></span><span></span><span></span>
       </div>
     </div>
     <div class="lyrics-body" id="lyricsBody"></div>
@@ -284,7 +280,22 @@ function renderSyncedLyrics() {
   syncedLines.forEach((line) => {
     const div = document.createElement('div');
     div.className = 'lyrics-line';
-    div.textContent = line.text || '\u00A0';
+
+    if (!line.text) {
+      div.innerHTML = '&nbsp;';
+    } else {
+      const words = line.text.split(' ');
+      words.forEach((w, wi) => {
+        const span = document.createElement('span');
+        span.className = 'word';
+        span.textContent = w;
+        div.appendChild(span);
+        if (wi < words.length - 1) {
+          div.appendChild(document.createTextNode(' '));
+        }
+      });
+    }
+
     track.appendChild(div);
   });
 }
@@ -305,8 +316,32 @@ function updateActiveLine() {
   if (!track) return;
 
   const lines = track.querySelectorAll('.lyrics-line');
+
   lines.forEach((el, i) => {
     el.classList.toggle('current', i === activeIndex);
+    const words = el.querySelectorAll('.word');
+
+    if (i < activeIndex) {
+      words.forEach(w => w.classList.add('sung'));
+      return;
+    }
+    if (i > activeIndex) {
+      words.forEach(w => w.classList.remove('sung'));
+      return;
+    }
+
+    const lineStart = syncedLines[i].time;
+    const lineEnd = syncedLines[i + 1] ? syncedLines[i + 1].time : lineStart + 4;
+    const duration = Math.max(lineEnd - lineStart, 0.3);
+    const progress = Math.min(Math.max((elapsedSeconds - lineStart) / duration, 0), 1);
+
+    const totalChars = Array.from(words).reduce((sum, w) => sum + w.textContent.length, 0) || 1;
+    let cumulative = 0;
+    words.forEach(w => {
+      cumulative += w.textContent.length;
+      const wordFraction = cumulative / totalChars;
+      w.classList.toggle('sung', wordFraction <= progress);
+    });
   });
 
   const lineHeight = lines[0]?.offsetHeight || 40;

@@ -622,39 +622,45 @@
   font-family: 'DM Sans', sans-serif;
   font-size: 1.15rem;
   font-weight: 700;
-  opacity: 0.3;
-  color: rgba(255,255,255,0.5);
   line-height: 2.6rem;
-  transition: opacity 0.4s ease, color 0.4s ease;
 }
 
-.lyrics-line.current {
-  opacity: 1;
+.word {
+  color: rgba(255,255,255,0.35);
+  transition: color 0.3s ease;
+}
+
+.word.sung {
   color: #fff;
 }
 
 .lyrics-progress-wrap {
   margin-bottom: 1.5rem;
-}
-
-.lyrics-progress-bar {
-  height: 3px;
-  background: rgba(255,255,255,0.1);
-  border-radius: 2px;
-  overflow: hidden;
-}
-
-.lyrics-progress-fill {
-  height: 100%;
-  background: #fff;
-  width: 0%;
-  transition: width 0.5s linear;
-}
-
-.lyrics-time {
   display: flex;
-  justify-content: space-between;
-  font-size: 0.65rem;
-  opacity: 0.4;
-  margin-top: 0.3rem;
+  justify-content: center;
+}
+
+.lyrics-eq {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 22px;
+}
+
+.lyrics-eq span {
+  display: block;
+  width: 4px;
+  background: #fff;
+  border-radius: 2px;
+  animation: lyricsEqBounce 0.9s ease-in-out infinite alternate;
+}
+
+.lyrics-eq span:nth-child(1) { animation-delay: 0s; }
+.lyrics-eq span:nth-child(2) { animation-delay: 0.15s; }
+.lyrics-eq span:nth-child(3) { animation-delay: 0.3s; }
+.lyrics-eq span:nth-child(4) { animation-delay: 0.45s; }
+
+@keyframes lyricsEqBounce {
+  from { height: 4px; }
+  to   { height: 20px; }
 }
