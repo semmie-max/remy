@@ -508,5 +508,6 @@ document.getElementById('nowPlaying').addEventListener('click', openLyrics);
 
   window.addEventListener('scroll', onFragScroll, { passive: true });
   window.addEventListener('resize', onFragScroll);
-  window.addEventListener('DOMContentLoaded', updateFragBlur);
+
+  updateFragBlur();
 })();
