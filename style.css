@@ -983,6 +983,7 @@
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
+  touch-action: pan-y;
   padding-right: 4px;
 }
 
@@ -1153,5 +1154,6 @@
   .playlist-scroll-container {
     height: 200px;
     width: 100%;
+    touch-action: pan-y;
   }
 }
