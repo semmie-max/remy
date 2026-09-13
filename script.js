@@ -240,13 +240,13 @@ lyricsOverlay.innerHTML = `
           <span></span><span></span><span></span><span></span>
         </div>
       </div>
+      <div class="lyrics-header">
+        <p class="lyrics-track" id="lyricsTrack"></p>
+        <p class="lyrics-artist" id="lyricsArtist"></p>
+      </div>
       <div class="lyrics-art-wrap">
         <img class="lyrics-art" id="lyricsArt" src="" alt="">
       </div>
-    </div>
-    <div class="lyrics-header">
-      <p class="lyrics-track" id="lyricsTrack"></p>
-      <p class="lyrics-artist" id="lyricsArtist"></p>
     </div>
     <div class="lyrics-body" id="lyricsBody"></div>
   </div>
@@ -345,26 +345,9 @@ function updateActiveLine() {
   lines.forEach((el, i) => {
     el.classList.toggle('current', i === activeIndex);
     const words = el.querySelectorAll('.word');
-
-    if (i !== activeIndex) {
-      words.forEach(w => w.classList.remove('sung'));
-      return;
-    }
-
-    const lineStart = syncedLines[i].time;
-    const lineEnd = syncedLines[i + 1] ? syncedLines[i + 1].time : lineStart + 4;
-    const duration = Math.max(lineEnd - lineStart, 0.3);
-    const progress = Math.min(Math.max((elapsedSeconds - lineStart) / duration, 0), 1);
-
-    const totalChars = Array.from(words).reduce((sum, w) => sum + w.textContent.length, 0) || 1;
-    let cumulative = 0;
-    words.forEach(w => {
-      cumulative += w.textContent.length;
-      const wordFraction = cumulative / totalChars;
-      w.classList.toggle('sung', wordFraction <= progress);
-    });
+    words.forEach(w => w.classList.toggle('sung', i === activeIndex));
   });
-
+  
   const lineHeight = lines[0]?.offsetHeight || 40;
   const offset = -(activeIndex * lineHeight) + (lyricsBody.clientHeight / 2 - lineHeight / 2);
   track.style.transform = `translateY(${offset}px)`;

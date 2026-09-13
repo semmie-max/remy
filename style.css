@@ -535,9 +535,10 @@
 .lyrics-top-row {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 1rem;
   margin-bottom: 1.2rem;
+  width: 100%;
 }
 
 .lyrics-art-wrap {
@@ -578,8 +579,17 @@
 }
 
 .lyrics-header {
-  margin-bottom: 1.5rem;
-  text-align: center;
+  flex: 1;
+  min-width: 0;
+  text-align: right;
+  margin-bottom: 0;
+}
+
+.lyrics-header .lyrics-track,
+.lyrics-header .lyrics-artist {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .lyrics-header .lyrics-track {
