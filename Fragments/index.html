@@ -86,6 +86,37 @@
 </section>
 <!-- PLAYLIST SECTION END -->
 
+ <!-- SIGN BOARD SECTION START -->
+<section class="signboard-section">
+  <h3 class="signboard-heading">leave your mark</h3>
+
+  <div class="signboard-frame">
+    <div class="signboard" id="signboard">
+      <!-- signatures get rendered in here by JS -->
+    </div>
+  </div>
+
+  <form class="signboard-form" id="signboardForm">
+    <input
+      type="text"
+      id="signboardInput"
+      class="signboard-input"
+      placeholder="write something..."
+      maxlength="40"
+      required
+    >
+    <div class="signboard-inks">
+      <button type="button" class="ink-dot" data-color="#1a1a1a" style="background:#1a1a1a" aria-label="black ink"></button>
+      <button type="button" class="ink-dot" data-color="#1e3a8a" style="background:#1e3a8a" aria-label="blue ink"></button>
+      <button type="button" class="ink-dot" data-color="#7f1d1d" style="background:#7f1d1d" aria-label="red ink"></button>
+      <button type="button" class="ink-dot" data-color="#14532d" style="background:#14532d" aria-label="green ink"></button>
+      <button type="button" class="ink-dot" data-color="#581c87" style="background:#581c87" aria-label="purple ink"></button>
+    </div>
+    <button type="submit" class="signboard-submit">sign</button>
+  </form>
+</section>
+<!-- SIGN BOARD SECTION END -->
+
   
   <script src="../script.js"></script>
 </body>
