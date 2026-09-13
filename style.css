@@ -729,7 +729,7 @@
   max-width: 700px;
   width: 100%;
   font-family: 'DM Sans', sans-serif;
-  font-size: clamp(1.3rem, 3vw, 2.1rem);
+  font-size: clamp(1rem, 2vw, 1.4rem);
   line-height: 1.7;
   font-weight: 300;
   color: #fff;
