@@ -630,8 +630,7 @@
   overflow: hidden;
   height: 380px;
   width: 100%;
-  display: flex;
-  align-items: center;
+  display: block;
   text-align: left;
   -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
   mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
