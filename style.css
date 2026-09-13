@@ -519,10 +519,10 @@
   background: #0a0a0a;
   border: 1px solid rgba(255,255,255,0.1);
   border-radius: 16px;
-  max-width: 260px;
+  max-width: 420px;
   width: 90%;
-  max-height: 60vh;
-  padding: 1rem;
+  max-height: 80vh;
+  padding: 1.25rem;
   position: relative;
   overflow-y: auto;
   transform: translateY(20px);
@@ -542,9 +542,9 @@
 }
 
 .lyrics-art-wrap {
-  width: 56px;
-  height: 56px;
-  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
   overflow: hidden;
   flex-shrink: 0;
   box-shadow: 0 6px 16px rgba(0,0,0,0.5);
@@ -595,14 +595,14 @@
 .lyrics-header .lyrics-track {
   font-family: 'DM Sans', sans-serif;
   font-weight: 600;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   color: #fff;
   margin: 0 0 0.1rem;
 }
 
 .lyrics-header .lyrics-artist {
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.65rem;
+  font-size: 0.6rem;
   color: rgba(255,255,255,0.5);
   margin: 0;
 }
@@ -628,13 +628,13 @@
 .lyrics-body {
   position: relative;
   overflow: hidden;
-  height: 120px;
+  height: 380px;
   width: 100%;
   display: flex;
   align-items: center;
   text-align: left;
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%);
-  mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
 }
 
 .lyrics-track {
@@ -649,14 +649,22 @@
 
 .lyrics-line {
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.85rem;
+  font-size: 1.05rem;
   font-weight: 700;
-  line-height: 1.8rem;
+  line-height: 2.4rem;
+  transform-origin: left center;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  opacity: 0.35;
 }
 
 .word {
   color: rgba(255,255,255,0.35);
   transition: color 0.3s ease;
+}
+
+.lyrics-line.current {
+  opacity: 1;
+  transform: scale(1.06);
 }
 
 .lyrics-line.current .word {
