@@ -208,6 +208,9 @@ lyricsOverlay.className = 'lyrics-overlay';
 lyricsOverlay.innerHTML = `
   <div class="lyrics-panel">
     <button class="lyrics-close" aria-label="Close">&times;</button>
+    <div class="lyrics-art-wrap">
+      <img class="lyrics-art" id="lyricsArt" src="" alt="">
+    </div>
     <div class="lyrics-header">
       <p class="lyrics-track" id="lyricsTrack"></p>
       <p class="lyrics-artist" id="lyricsArtist"></p>
@@ -229,6 +232,7 @@ document.body.appendChild(lyricsOverlay);
 const lyricsBody = document.getElementById('lyricsBody');
 const lyricsTrackEl = document.getElementById('lyricsTrack');
 const lyricsArtistEl = document.getElementById('lyricsArtist');
+const lyricsArtEl = document.getElementById('lyricsArt');
 const lyricsProgressWrap = document.getElementById('lyricsProgressWrap');
 const lyricsProgressFill = document.getElementById('lyricsProgressFill');
 const lyricsElapsedEl = document.getElementById('lyricsElapsed');
@@ -391,6 +395,7 @@ function openLyrics() {
 
   lyricsTrackEl.textContent = track;
   lyricsArtistEl.textContent = artist;
+  lyricsArtEl.src = document.getElementById('npAlbumArt').src || '';
   lyricsBody.innerHTML = '<p class="lyrics-body loading">Loading lyrics...</p>';
   lyricsOverlay.classList.add('visible');
 
