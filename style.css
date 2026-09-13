@@ -654,21 +654,22 @@
   line-height: 2.4rem;
   transform-origin: left center;
   transition: transform 0.3s ease, opacity 0.3s ease;
-  opacity: 0.35;
+  opacity: 0.25;
 }
 
 .word {
-  color: rgba(255,255,255,0.35);
+  color: rgba(255,255,255,0.25);
   transition: color 0.3s ease;
 }
 
 .lyrics-line.current {
   opacity: 1;
-  transform: scale(1.06);
+  transform: scale(1.08);
 }
 
 .lyrics-line.current .word {
   color: #fff;
+  font-weight: 800;
 }
 
 .lyrics-progress-wrap {
