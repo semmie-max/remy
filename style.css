@@ -782,7 +782,6 @@
 }
 
 .frag-note {
-  align-self: flex-start;
   width: auto;
   margin-top: 2rem;
   display: flex;
