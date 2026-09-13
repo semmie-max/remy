@@ -474,6 +474,18 @@ document.getElementById('nowPlaying').addEventListener('click', openLyrics);
   const fragEls = document.querySelectorAll('[data-frag-blur]');
   if (!fragEls.length) return;
 
+  const photoStack = document.getElementById('fragPhotos');
+  if (photoStack) {
+    const polaroids = photoStack.querySelectorAll('.frag-polaroid');
+    let topZ = polaroids.length + 1;
+    polaroids.forEach((el) => {
+      el.addEventListener('click', () => {
+        topZ++;
+        el.style.zIndex = topZ;
+      });
+    });
+  }
+
   const FRAG_MAX_BLUR = 14;
   const FRAG_MIN_OPACITY = 0.4;
 
