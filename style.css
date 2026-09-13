@@ -782,10 +782,9 @@
 }
 
 .frag-note {
-  position: absolute;
-  bottom: 2rem;
-  left: 2rem;
-  z-index: 5;
+  width: 100%;
+  max-width: 700px;
+  margin-top: 1rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
