@@ -230,9 +230,6 @@ const lyricsTrackEl = document.getElementById('lyricsTrack');
 const lyricsArtistEl = document.getElementById('lyricsArtist');
 const lyricsArtEl = document.getElementById('lyricsArt');
 const lyricsProgressWrap = document.getElementById('lyricsProgressWrap');
-const lyricsProgressFill = document.getElementById('lyricsProgressFill');
-const lyricsElapsedEl = document.getElementById('lyricsElapsed');
-const lyricsDurationEl = document.getElementById('lyricsDuration');
 
 let syncedLines = [];
 let songDuration = 0;
@@ -349,15 +346,6 @@ function updateActiveLine() {
   track.style.transform = `translateY(${offset}px)`;
 }
 
-function updateProgressBar() {
-  if (songDuration > 0) {
-    const pct = Math.min((elapsedSeconds / songDuration) * 100, 100);
-    lyricsProgressFill.style.width = pct + '%';
-  }
-  lyricsElapsedEl.textContent = formatTime(elapsedSeconds);
-  lyricsDurationEl.textContent = formatTime(songDuration);
-}
-
 function startPlaybackTimer() {
   stopPlaybackTimer();
   elapsedSeconds = getCurrentProgressSeconds();
@@ -366,7 +354,6 @@ function startPlaybackTimer() {
     if (songDuration > 0 && elapsedSeconds > songDuration) {
       elapsedSeconds = songDuration;
     }
-    updateProgressBar();
     updateActiveLine();
   }, 500);
 }
@@ -398,7 +385,6 @@ async function fetchLyrics(artist, track) {
       if (syncedLines.length > 0) {
         renderSyncedLyrics();
         lyricsProgressWrap.style.display = 'block';
-        updateProgressBar();
         startPlaybackTimer();
         return;
       }
