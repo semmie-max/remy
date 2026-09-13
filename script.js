@@ -536,61 +536,11 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!playlistContainer) return;
 
   const songItems = playlistContainer.querySelectorAll(".song-item");
-  let currentAudio = null;
-  let currentPlayingItem = null;
 
   songItems.forEach((item) => {
     item.addEventListener("click", () => {
-      // Toggle selection class
       songItems.forEach((s) => s.classList.remove("active"));
       item.classList.add("active");
-
-      const audioSrc = item.getAttribute("data-src");
-      const playIcon = item.querySelector(".play-icon");
-
-      // Audio handling structure
-      if (currentPlayingItem === item && currentAudio) {
-        if (!currentAudio.paused) {
-          currentAudio.pause();
-          updatePlayIcon(playIcon, false);
-        } else {
-          currentAudio.play();
-          updatePlayIcon(playIcon, true);
-        }
-      } else {
-        if (currentAudio) {
-          currentAudio.pause();
-          if (currentPlayingItem) {
-            updatePlayIcon(currentPlayingItem.querySelector(".play-icon"), false);
-          }
-        }
-
-        // Initialize audio instance
-        currentAudio = new Audio(audioSrc);
-        currentPlayingItem = item;
-        
-        currentAudio.play().then(() => {
-          updatePlayIcon(playIcon, true);
-        }).catch(() => {
-          // Fallback if audio URL is a placeholder or blocked by browser policies
-          console.log("Audio play attempt triggered for:", audioSrc);
-        });
-
-        currentAudio.onended = () => {
-          updatePlayIcon(playIcon, false);
-        };
-      }
     });
   });
-
-  function updatePlayIcon(iconElement, isPlaying) {
-    if (!iconElement) return;
-    if (isPlaying) {
-      // Pause Icon SVG Path
-      iconElement.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
-    } else {
-      // Play Icon SVG Path
-      iconElement.innerHTML = '<path d="M8 5v14l11-7z"/>';
-    }
-  }
 });
