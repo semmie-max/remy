@@ -6,6 +6,28 @@ document.getElementById('row2').textContent = 'remomhe';
 const LASTFM_USER = 'Rv3my';
 const LASTFM_API_KEY = '248965a0017aa3f8ee2ab5f4440785e8';   
 
+const SPOTIFY_PROXY_URL = 'https://now-playing-proxy.aremomheremy.workers.dev';
+
+let livePlayback = { progress_ms: 0, duration_ms: 0, is_playing: false, lastFetch: 0 };
+
+async function pollSpotifyProgress() {
+  try {
+    const res = await fetch(SPOTIFY_PROXY_URL);
+    const data = await res.json();
+    livePlayback = { ...data, lastFetch: Date.now() };
+  } catch (e) {
+    console.error('Progress poll failed', e);
+  }
+}
+pollSpotifyProgress();
+setInterval(pollSpotifyProgress, 3000);
+
+function getCurrentProgressSeconds() {
+  if (!livePlayback.is_playing) return livePlayback.progress_ms / 1000;
+  const drift = (Date.now() - livePlayback.lastFetch) / 1000;
+  return (livePlayback.progress_ms / 1000) + drift;
+}
+
 async function fetchNowPlaying() {
   const url = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${LASTFM_USER}&api_key=${LASTFM_API_KEY}&format=json&limit=1`;
 
@@ -294,9 +316,9 @@ function updateProgressBar() {
 
 function startPlaybackTimer() {
   stopPlaybackTimer();
-  elapsedSeconds = 0;
+  elapsedSeconds = getCurrentProgressSeconds();
   playbackTimer = setInterval(() => {
-    elapsedSeconds += 0.5;
+    elapsedSeconds = getCurrentProgressSeconds();
     if (songDuration > 0 && elapsedSeconds > songDuration) {
       elapsedSeconds = songDuration;
     }
