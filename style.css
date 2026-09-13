@@ -782,8 +782,8 @@
 }
 
 .frag-note {
-  width: 100%;
-  max-width: 700px;
+  align-self: flex-start;
+  width: auto;
   margin-top: 2rem;
   display: flex;
   flex-direction: row;
