@@ -779,3 +779,29 @@
 .site-nav a:hover::after {
   width: 100%;
 }
+
+.frag-note {
+  position: absolute;
+  top: -60px;
+  left: 2rem;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  pointer-events: none;
+}
+
+.frag-note-text {
+  font-family: 'Permanent Marker', cursive;
+  font-size: 1.4rem;
+  line-height: 1.3;
+  color: #fff;
+  margin: 0 0 0.5rem 0.5rem;
+  transform: rotate(-3deg);
+}
+
+.frag-note-arrow {
+  width: 60px;
+  height: auto;
+  margin-left: 1.5rem;
+}
