@@ -1,5 +1,6 @@
 
-document.getElementById('row2').textContent = 'remomhe';
+const row2El = document.getElementById('row2');
+if (row2El) row2El.textContent = 'remomhe';
 
 
 
