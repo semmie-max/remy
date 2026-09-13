@@ -234,17 +234,19 @@ lyricsOverlay.className = 'lyrics-overlay';
 lyricsOverlay.innerHTML = `
   <div class="lyrics-panel">
     <button class="lyrics-close" aria-label="Close">&times;</button>
-    <div class="lyrics-art-wrap">
-      <img class="lyrics-art" id="lyricsArt" src="" alt="">
+    <div class="lyrics-top-row">
+      <div class="lyrics-progress-wrap" id="lyricsProgressWrap" style="display:none;">
+        <div class="lyrics-eq">
+          <span></span><span></span><span></span><span></span>
+        </div>
+      </div>
+      <div class="lyrics-art-wrap">
+        <img class="lyrics-art" id="lyricsArt" src="" alt="">
+      </div>
     </div>
     <div class="lyrics-header">
       <p class="lyrics-track" id="lyricsTrack"></p>
       <p class="lyrics-artist" id="lyricsArtist"></p>
-    </div>
-    <div class="lyrics-progress-wrap" id="lyricsProgressWrap" style="display:none;">
-      <div class="lyrics-eq">
-        <span></span><span></span><span></span><span></span>
-      </div>
     </div>
     <div class="lyrics-body" id="lyricsBody"></div>
   </div>
