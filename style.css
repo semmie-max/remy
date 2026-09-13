@@ -784,11 +784,11 @@
 .frag-note {
   width: 100%;
   max-width: 700px;
-  margin-top: 1rem;
+  margin-top: 2rem;
   display: flex;
   flex-direction: row;
-  align-items: center;
-  gap: 1rem;
+  align-items: flex-start;
+  gap: 2rem;
   pointer-events: none;
 }
 
@@ -800,8 +800,8 @@
 }
 
 .frag-note-image {
-  width: 140px;
-  height: 140px;
+  width: 320px;
+  height: 320px;
   border: 2px dashed rgba(255, 255, 255, 0.5);
   border-radius: 8px;
   overflow: hidden;
