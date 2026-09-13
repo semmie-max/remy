@@ -9,12 +9,38 @@ const LASTFM_API_KEY = '248965a0017aa3f8ee2ab5f4440785e8';
 const SPOTIFY_PROXY_URL = 'https://now-playing-proxy.aremomheremy.workers.dev';
 
 let livePlayback = { progress_ms: 0, duration_ms: 0, is_playing: false, lastFetch: 0 };
+let currentTrackKey = '';
 
 async function pollSpotifyProgress() {
   try {
     const res = await fetch(SPOTIFY_PROXY_URL);
     const data = await res.json();
     livePlayback = { ...data, lastFetch: Date.now() };
+
+    if (data.is_playing && data.track) {
+      const widget = document.getElementById('nowPlaying');
+      widget.classList.remove('hidden');
+      indicator.classList.add("playing");
+      document.getElementById('npTrack').textContent = data.track;
+      document.getElementById('npArtist').textContent = data.artist || '';
+      const albumImg = document.getElementById('npAlbumArt');
+      if (data.album_image) albumImg.src = data.album_image;
+
+      const trackKey = `${data.track}__${data.artist}`;
+      if (trackKey !== currentTrackKey) {
+        currentTrackKey = trackKey;
+        if (lyricsOverlay.classList.contains('visible')) {
+          lyricsTrackEl.textContent = data.track;
+          lyricsArtistEl.textContent = data.artist || '';
+          lyricsArtEl.src = data.album_image || '';
+          fetchLyrics(data.artist, data.track);
+        }
+      }
+    } else if (!data.is_playing) {
+      const widget = document.getElementById('nowPlaying');
+      widget.classList.add('hidden');
+      indicator.classList.remove("playing");
+    }
   } catch (e) {
     console.error('Progress poll failed', e);
   }
@@ -318,11 +344,7 @@ function updateActiveLine() {
     el.classList.toggle('current', i === activeIndex);
     const words = el.querySelectorAll('.word');
 
-    if (i < activeIndex) {
-      words.forEach(w => w.classList.add('sung'));
-      return;
-    }
-    if (i > activeIndex) {
+    if (i !== activeIndex) {
       words.forEach(w => w.classList.remove('sung'));
       return;
     }
