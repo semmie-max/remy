@@ -581,3 +581,68 @@ document.addEventListener("DOMContentLoaded", () => {
     .then((data) => renderPlaylist(data))
     .catch((e) => console.error("Playlist fetch failed", e));
 });
+
+(function () {
+  const board = document.getElementById('signboard');
+  const form = document.getElementById('signboardForm');
+  const input = document.getElementById('signboardInput');
+  const inkDots = document.querySelectorAll('.ink-dot');
+
+  if (!board || !form) return;
+
+  let selectedColor = '#1a1a1a';
+
+  inkDots.forEach((dot, i) => {
+    if (i === 0) dot.classList.add('selected');
+    dot.addEventListener('click', () => {
+      inkDots.forEach(d => d.classList.remove('selected'));
+      dot.classList.add('selected');
+      selectedColor = dot.dataset.color;
+    });
+  });
+
+  function renderSignature(sig) {
+    const el = document.createElement('div');
+    el.className = 'signboard-signature';
+    el.textContent = sig.text;
+    el.style.color = sig.color;
+    el.style.left = sig.x + '%';
+    el.style.top = sig.y + '%';
+    el.style.setProperty('--rot', sig.rot + 'deg');
+    el.style.transform = `rotate(${sig.rot}deg)`;
+    el.style.fontSize = sig.size + 'rem';
+    board.appendChild(el);
+  }
+
+  function loadSignatures() {
+    const saved = JSON.parse(localStorage.getItem('boardSignatures') || '[]');
+    saved.forEach(renderSignature);
+  }
+
+  function saveSignature(sig) {
+    const saved = JSON.parse(localStorage.getItem('boardSignatures') || '[]');
+    saved.push(sig);
+    localStorage.setItem('boardSignatures', JSON.stringify(saved));
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const text = input.value.trim();
+    if (!text) return;
+
+    const sig = {
+      text,
+      color: selectedColor,
+      x: Math.random() * 70 + 5,   // 5%–75% from left
+      y: Math.random() * 75 + 5,   // 5%–80% from top
+      rot: Math.random() * 16 - 8, // -8deg to 8deg
+      size: (Math.random() * 0.4 + 0.9).toFixed(2) // 0.9–1.3rem
+    };
+
+    renderSignature(sig);
+    saveSignature(sig);
+    input.value = '';
+  });
+
+  loadSignatures();
+})();
