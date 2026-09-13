@@ -737,3 +737,42 @@
   opacity: 0.4;
   will-change: filter, opacity;
 }
+
+
+.site-nav {
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
+  z-index: 50;
+}
+
+.site-nav a {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #555;
+  text-decoration: none;
+  position: relative;
+  padding-bottom: 3px;
+  transition: color 0.3s;
+}
+
+.site-nav a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: #fff;
+  transition: width 0.3s ease;
+}
+
+.site-nav a:hover {
+  color: #fff;
+}
+
+.site-nav a:hover::after {
+  width: 100%;
+}
