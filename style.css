@@ -709,6 +709,7 @@
    =================================================================== */
 
 .frag-hero {
+  position: relative;
   min-height: 160vh; /* extra scroll room so the reveal has space to happen */
   display: flex;
   flex-direction: column;
@@ -782,7 +783,7 @@
 
 .frag-note {
   position: absolute;
-  top: -60px;
+  bottom: 2rem;
   left: 2rem;
   z-index: 5;
   display: flex;
@@ -796,12 +797,11 @@
   font-size: 1.4rem;
   line-height: 1.3;
   color: #fff;
-  margin: 0 0 0.5rem 0.5rem;
+  margin: 0 0 0.5rem 0.2rem;
   transform: rotate(-3deg);
 }
 
 .frag-note-arrow {
-  width: 60px;
+  width: 130px;
   height: auto;
-  margin-left: 1.5rem;
 }
