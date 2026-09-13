@@ -532,15 +532,52 @@ document.getElementById('nowPlaying').addEventListener('click', openLyrics);
 
 
 document.addEventListener("DOMContentLoaded", () => {
-  const playlistContainer = document.querySelector(".playlist-scroll-container");
-  if (!playlistContainer) return;
+  const songListEl = document.getElementById("songList");
+  if (!songListEl) return;
 
-  const songItems = playlistContainer.querySelectorAll(".song-item");
+  function formatDuration(ms) {
+    const totalSec = Math.floor(ms / 1000);
+    const min = Math.floor(totalSec / 60);
+    const sec = (totalSec % 60).toString().padStart(2, "0");
+    return `${min}:${sec}`;
+  }
 
-  songItems.forEach((item) => {
-    item.addEventListener("click", () => {
-      songItems.forEach((s) => s.classList.remove("active"));
-      item.classList.add("active");
+  function renderPlaylist(playlist) {
+    document.getElementById("playlistName").textContent = playlist.name || "My Playlist";
+    document.getElementById("playlistCoverImg").src = playlist.coverImage || "";
+    document.getElementById("playlistCoverTitle").textContent = playlist.name || "";
+    document.getElementById("playlistCoverSub").textContent = `${playlist.tracks.length} songs`;
+
+    songListEl.innerHTML = "";
+
+    playlist.tracks.forEach((track, i) => {
+      const li = document.createElement("li");
+      li.className = "song-item";
+      li.dataset.uri = track.uri || "";
+
+      li.innerHTML = `
+        <span class="song-index">${i + 1}</span>
+        <div class="song-info">
+          <span class="song-title">${track.name}</span>
+          <span class="song-artist">${track.artist}</span>
+        </div>
+        <span class="song-duration">${formatDuration(track.durationMs)}</span>
+        <svg class="song-note-icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+          <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+        </svg>
+      `;
+
+      li.addEventListener("click", () => {
+        songListEl.querySelectorAll(".song-item").forEach((s) => s.classList.remove("active"));
+        li.classList.add("active");
+      });
+
+      songListEl.appendChild(li);
     });
-  });
+  }
+
+  fetch("https://now-playing-proxy.aremomheremy.workers.dev/playlist")
+    .then((res) => res.json())
+    .then((data) => renderPlaylist(data))
+    .catch((e) => console.error("Playlist fetch failed", e));
 });
