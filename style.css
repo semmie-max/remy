@@ -1134,27 +1134,18 @@
     flex-direction: column;
   }
 
-  .playlist-art,
-  .playlist-controls,
-  .song-index,
-  .song-duration {
+  /* hide the scrollable tracklist on mobile — just show the cover */
+  .playlist-scroll-container,
+  .playlist-controls {
     display: none;
   }
 
-  .song-note-icon {
-    display: block;
-    fill: rgba(255, 255, 255, 0.3);
-  }
-
-  .song-item.active .song-note-icon,
-  .song-item:hover .song-note-icon {
-    fill: #ffffff;
-  }
-
-  .playlist-scroll-container {
-    height: 200px;
+  .playlist-art {
     width: 100%;
-    touch-action: pan-y;
+  }
+
+  .playlist-art img {
+    border-radius: 10px;
   }
 }
 
