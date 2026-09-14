@@ -841,6 +841,34 @@
   pointer-events: none;
 }
 
+.frag-name-section {
+  padding: 4rem 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #000;
+}
+
+.frag-name {
+  font-family: 'Arial Black', 'DM Sans', sans-serif;
+  font-weight: 900;
+  font-size: clamp(3.5rem, 14vw, 10rem);
+  letter-spacing: 0.02em;
+  line-height: 1;
+  margin: 0;
+  text-align: center;
+  color: transparent;
+  background-image: radial-gradient(#fff 35%, transparent 36%);
+  background-size: 8px 8px;
+  -webkit-background-clip: text;
+  background-clip: text;
+  --reveal: 0%;
+  -webkit-mask-image: linear-gradient(to right, #000 var(--reveal), transparent var(--reveal));
+  mask-image: linear-gradient(to right, #000 var(--reveal), transparent var(--reveal));
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
 .frag-polaroid:nth-child(1) { top: 0;   left: 0;   transform: rotate(-8deg); z-index: 1; }
 .frag-polaroid:nth-child(2) { top: 15px; left: 90px; transform: rotate(5deg);  z-index: 2; }
 .frag-polaroid:nth-child(3) { top: 40px; left: 180px; transform: rotate(-4deg); z-index: 3; }

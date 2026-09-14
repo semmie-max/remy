@@ -516,6 +516,50 @@ document.getElementById('nowPlaying').addEventListener('click', openLyrics);
   fragEls.forEach((el) => fragObserver.observe(el));
 })();
 
+// ===================================================================
+// ===== Fragments page: scroll-linked name reveal (RV3MY) ===========
+// Progress is driven directly by scroll position, so it naturally
+// pauses wherever the user stops scrolling and resumes on scroll.
+// ===================================================================
+
+(function () {
+  const nameEl = document.querySelector('[data-frag-name]');
+  if (!nameEl) return;
+
+  function clampReveal(v, min, max) {
+    return Math.min(Math.max(v, min), max);
+  }
+
+  function updateNameReveal() {
+    const rect = nameEl.getBoundingClientRect();
+    const windowHeight = window.innerHeight;
+
+    const start = windowHeight * 0.85;
+    const end = windowHeight * 0.25;
+
+    let progress = (start - rect.top) / (start - end);
+    progress = clampReveal(progress, 0, 1);
+
+    nameEl.style.setProperty('--reveal', (progress * 100) + '%');
+  }
+
+  let nameTicking = false;
+  function onNameScroll() {
+    if (!nameTicking) {
+      requestAnimationFrame(() => {
+        updateNameReveal();
+        nameTicking = false;
+      });
+      nameTicking = true;
+    }
+  }
+
+  window.addEventListener('scroll', onNameScroll, { passive: true });
+  window.addEventListener('resize', onNameScroll);
+
+  updateNameReveal();
+})();
+
 
 document.addEventListener("DOMContentLoaded", () => {
   const songListEl = document.getElementById("songList");
