@@ -16,7 +16,7 @@
 <body>
   <script src="../common.js"></script>
 
-  <section class="frag-hero">
+    <section class="frag-hero">
     <p class="frag-line" data-frag-blur>I’m made up of a few contradictions.</p>
     <p class="frag-line" data-frag-blur>If I had to describe myself, I’d probably need a few attempts.</p>
 
@@ -29,7 +29,7 @@
           <path d="M112,50 L128,62 L112,74" stroke="#fff" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </div>
-            <div class="frag-note-photos" id="fragPhotos">
+      <div class="frag-note-photos" id="fragPhotos">
         <div class="frag-polaroid">
           <img src="/images/me.jpg" alt="">
           <p class="frag-polaroid-caption">---</p>
@@ -45,85 +45,94 @@
       </div>
     </div>
   </section>
+
+  <!-- connector: hero -> playlist -->
+  <div class="section-connector" aria-hidden="true">
+    <svg viewBox="0 0 1000 100" preserveAspectRatio="none">
+      <path class="connector-path"
+        d="M 0 60 C 200 100, 300 10, 500 60 S 800 100, 1000 60" />
+    </svg>
+  </div>
+
   <!-- PLAYLIST SECTION START -->
-<section class="playlist-section">
-  <div class="playlist-card">
+  <section class="playlist-section">
+    <div class="playlist-card">
 
-    <div class="playlist-header">
-      <div class="playlist-title-group">
-        <svg class="playlist-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-          <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
-        </svg>
-        <h3 id="playlistName">My Playlist</h3>
-      </div>
-      <span class="playlist-badge">soundtracking my days</span>
-    </div>
-
-    <div class="playlist-body">
-      <div class="playlist-art">
-        <img id="playlistCoverImg" src="" alt="">
-        <p class="playlist-art-title" id="playlistCoverTitle"></p>
-        <p class="playlist-art-sub" id="playlistCoverSub"></p>
+      <div class="playlist-header">
+        <div class="playlist-title-group">
+          <svg class="playlist-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+            <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+          </svg>
+          <h3 id="playlistName">My Playlist</h3>
+        </div>
+        <span class="playlist-badge">soundtracking my days</span>
       </div>
 
-      <div class="playlist-scroll-container">
-        <ul class="song-list" id="songList">
-          <!-- song items get rendered in here by JS -->
-        </ul>
+      <div class="playlist-body">
+        <div class="playlist-art">
+          <img id="playlistCoverImg" src="" alt="">
+          <p class="playlist-art-title" id="playlistCoverTitle"></p>
+          <p class="playlist-art-sub" id="playlistCoverSub"></p>
+        </div>
+
+        <div class="playlist-scroll-container">
+          <ul class="song-list" id="songList">
+            <!-- song items get rendered in here by JS -->
+          </ul>
+        </div>
       </div>
-    </div>
 
-    <div class="playlist-controls">
-      <button id="plPrev" aria-label="Previous">⏮</button>
-      <button id="plPlay" aria-label="Play">▶</button>
-      <button id="plNext" aria-label="Next">⏭</button>
-      <div class="playlist-progress">
-        <div class="playlist-progress-fill" id="plProgressFill"></div>
+      <div class="playlist-controls">
+        <button id="plPrev" aria-label="Previous">⏮</button>
+        <button id="plPlay" aria-label="Play">▶</button>
+        <button id="plNext" aria-label="Next">⏭</button>
+        <div class="playlist-progress">
+          <div class="playlist-progress-fill" id="plProgressFill"></div>
+        </div>
       </div>
+
     </div>
+  </section>
+  <!-- PLAYLIST SECTION END -->
 
-  </div>
-</section>
-<!-- PLAYLIST SECTION END -->
-
- <!-- SIGN BOARD SECTION START -->
-<section class="signboard-section">
-  <h3 class="signboard-heading">leave your mark</h3>
-
-  <div class="signboard-frame">
-    <div class="signboard" id="signboard">
-      <!-- signatures get rendered in here by JS -->
-    </div>
+  <!-- connector: playlist -> signboard -->
+  <div class="section-connector" aria-hidden="true">
+    <svg viewBox="0 0 1000 100" preserveAspectRatio="none">
+      <path class="connector-path"
+        d="M 0 40 Q 250 90 500 45 T 1000 40" />
+    </svg>
   </div>
 
-  <form class="signboard-form" id="signboardForm">
-    <input
-      type="text"
-      id="signboardInput"
-      class="signboard-input"
-      placeholder="write something..."
-      maxlength="40"
-      required
-    >
-    <div class="signboard-inks">
-      <button type="button" class="ink-dot" data-color="#1a1a1a" style="background:#1a1a1a" aria-label="black ink"></button>
-      <button type="button" class="ink-dot" data-color="#1e3a8a" style="background:#1e3a8a" aria-label="blue ink"></button>
-      <button type="button" class="ink-dot" data-color="#7f1d1d" style="background:#7f1d1d" aria-label="red ink"></button>
-      <button type="button" class="ink-dot" data-color="#14532d" style="background:#14532d" aria-label="green ink"></button>
-      <button type="button" class="ink-dot" data-color="#581c87" style="background:#581c87" aria-label="purple ink"></button>
-    </div>
-    <button type="submit" class="signboard-submit">sign</button>
-  </form>
-</section>
-<div class="section-connector" aria-hidden="true">
-  <svg viewBox="0 0 1000 100" preserveAspectRatio="none">
-    <path class="connector-path"
-      d="M 0 50 C 150 10, 250 90, 400 50 S 650 10, 800 50 1000 50 1000 50" />
-  </svg>
-</div>
-<!-- SIGN BOARD SECTION END -->
+  <!-- SIGN BOARD SECTION START -->
+  <section class="signboard-section">
+    <h3 class="signboard-heading">leave your mark</h3>
 
-  
+    <div class="signboard-frame">
+      <div class="signboard" id="signboard">
+        <!-- signatures get rendered in here by JS -->
+      </div>
+    </div>
+
+    <form class="signboard-form" id="signboardForm">
+      <input
+        type="text"
+        id="signboardInput"
+        class="signboard-input"
+        placeholder="write something..."
+        maxlength="40"
+        required
+      >
+      <div class="signboard-inks">
+        <button type="button" class="ink-dot" data-color="#1a1a1a" style="background:#1a1a1a" aria-label="black ink"></button>
+        <button type="button" class="ink-dot" data-color="#1e3a8a" style="background:#1e3a8a" aria-label="blue ink"></button>
+        <button type="button" class="ink-dot" data-color="#7f1d1d" style="background:#7f1d1d" aria-label="red ink"></button>
+        <button type="button" class="ink-dot" data-color="#14532d" style="background:#14532d" aria-label="green ink"></button>
+        <button type="button" class="ink-dot" data-color="#581c87" style="background:#581c87" aria-label="purple ink"></button>
+      </div>
+      <button type="submit" class="signboard-submit">sign</button>
+    </form>
+  </section>
+
   <script src="../script.js"></script>
 </body>
 </html>
