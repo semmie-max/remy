@@ -1270,8 +1270,8 @@
 .section-connector {
   width: 100%;
   max-width: 900px;
-  height: 100px;
-  margin: -10px auto;
+  height: 180px;
+  margin: 10px auto;
   pointer-events: none;
   position: relative;
   z-index: 1;
