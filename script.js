@@ -463,7 +463,7 @@ document.getElementById('nowPlaying').addEventListener('click', openLyrics);
 
 
 // ===================================================================
-// ===== Fragments page: scroll-blur text section (added below) =====
+// ===== Fragments page: scroll-triggered typewriter text section ====
 // Wrapped in its own IIFE so nothing here leaks into the global scope
 // or collides with anything above. Also does nothing at all on pages
 // that don't have a [data-frag-blur] element, so it's safe to include
@@ -486,48 +486,34 @@ document.getElementById('nowPlaying').addEventListener('click', openLyrics);
     });
   }
 
-  const FRAG_MAX_BLUR = 14;
-  const FRAG_MIN_OPACITY = 0.4;
+  const FRAG_TYPE_SPEED = 32;
 
-  function fragClamp(v, min, max) {
-    return Math.min(Math.max(v, min), max);
+  function typeFragLine(el) {
+    const fullText = el.textContent;
+    el.textContent = '';
+    el.classList.add('typing');
+
+    let i = 0;
+    const interval = setInterval(() => {
+      el.textContent += fullText[i];
+      i++;
+      if (i >= fullText.length) {
+        clearInterval(interval);
+        el.classList.remove('typing');
+      }
+    }, FRAG_TYPE_SPEED);
   }
 
-  function updateFragBlur() {
-    const windowHeight = window.innerHeight;
-
-    fragEls.forEach((el) => {
-      const rect = el.getBoundingClientRect();
-
-      const start = windowHeight;
-      const end = windowHeight * 0.35;
-
-      let progress = (start - rect.top) / (start - end);
-      progress = fragClamp(progress, 0, 1);
-
-      const blur = (1 - progress) * FRAG_MAX_BLUR;
-      const opacity = FRAG_MIN_OPACITY + progress * (1 - FRAG_MIN_OPACITY);
-
-      el.style.filter = `blur(${blur}px)`;
-      el.style.opacity = opacity;
+  const fragObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        typeFragLine(entry.target);
+        fragObserver.unobserve(entry.target);
+      }
     });
-  }
+  }, { threshold: 0.4 });
 
-  let fragTicking = false;
-  function onFragScroll() {
-    if (!fragTicking) {
-      requestAnimationFrame(() => {
-        updateFragBlur();
-        fragTicking = false;
-      });
-      fragTicking = true;
-    }
-  }
-
-  window.addEventListener('scroll', onFragScroll, { passive: true });
-  window.addEventListener('resize', onFragScroll);
-
-  updateFragBlur();
+  fragEls.forEach((el) => fragObserver.observe(el));
 })();
 
 
