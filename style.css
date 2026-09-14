@@ -847,26 +847,31 @@
   justify-content: center;
   align-items: center;
   background: #000;
+  overflow: hidden;
 }
 
-.frag-name {
+.frag-name-wrap {
+  width: 100%;
+  max-width: 900px;
+}
+
+.frag-name-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+
+.frag-name-text {
   font-family: 'Arial Black', 'DM Sans', sans-serif;
   font-weight: 900;
-  font-size: clamp(3.5rem, 14vw, 10rem);
-  letter-spacing: 0.02em;
-  line-height: 1;
-  margin: 0;
-  text-align: center;
-  color: transparent;
-  background-image: radial-gradient(#fff 35%, transparent 36%);
-  background-size: 8px 8px;
-  -webkit-background-clip: text;
-  background-clip: text;
-  --reveal: 0%;
-  -webkit-mask-image: linear-gradient(to right, #000 var(--reveal), transparent var(--reveal));
-  mask-image: linear-gradient(to right, #000 var(--reveal), transparent var(--reveal));
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
+  font-size: 150px;
+  letter-spacing: 2px;
+  fill: rgba(255, 255, 255, 0.06);
+  stroke: #fff;
+  stroke-width: 2;
+  stroke-dasharray: 6 6;
+  will-change: transform;
 }
 
 .frag-polaroid:nth-child(1) { top: 0;   left: 0;   transform: rotate(-8deg); z-index: 1; }

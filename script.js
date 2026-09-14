@@ -526,28 +526,32 @@ document.getElementById('nowPlaying').addEventListener('click', openLyrics);
   const nameEl = document.querySelector('[data-frag-name]');
   if (!nameEl) return;
 
-  function clampReveal(v, min, max) {
+  const NAME_SLIDE_RANGE = 220;
+
+  function clampSlide(v, min, max) {
     return Math.min(Math.max(v, min), max);
   }
 
-  function updateNameReveal() {
-    const rect = nameEl.getBoundingClientRect();
+  function updateNameSlide() {
+    const section = nameEl.closest('.frag-name-section');
+    const rect = section.getBoundingClientRect();
     const windowHeight = window.innerHeight;
 
-    const start = windowHeight * 0.85;
-    const end = windowHeight * 0.25;
+    const start = windowHeight * 0.9;
+    const end = windowHeight * 0.1;
 
     let progress = (start - rect.top) / (start - end);
-    progress = clampReveal(progress, 0, 1);
+    progress = clampSlide(progress, 0, 1);
 
-    nameEl.style.setProperty('--reveal', (progress * 100) + '%');
+    const offset = NAME_SLIDE_RANGE - (progress * NAME_SLIDE_RANGE * 2);
+    nameEl.style.transform = `translateX(${offset}px)`;
   }
 
   let nameTicking = false;
   function onNameScroll() {
     if (!nameTicking) {
       requestAnimationFrame(() => {
-        updateNameReveal();
+        updateNameSlide();
         nameTicking = false;
       });
       nameTicking = true;
@@ -557,7 +561,7 @@ document.getElementById('nowPlaying').addEventListener('click', openLyrics);
   window.addEventListener('scroll', onNameScroll, { passive: true });
   window.addEventListener('resize', onNameScroll);
 
-  updateNameReveal();
+  updateNameSlide();
 })();
 
 
