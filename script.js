@@ -238,26 +238,102 @@ document.addEventListener("visibilitychange", () => {
 const lyricsOverlay = document.createElement('div');
 lyricsOverlay.className = 'lyrics-overlay';
 lyricsOverlay.innerHTML = `
-  <div class="lyrics-panel">
+  <div class="lyrics-panel" id="lyricsPanel" data-view="player">
     <button class="lyrics-close" aria-label="Close">&times;</button>
-    <div class="lyrics-top-row">
-      <div class="lyrics-progress-wrap" id="lyricsProgressWrap" style="display:none;">
-        <div class="lyrics-eq">
-          <span></span><span></span><span></span><span></span>
+
+    <div class="player-view" id="playerView">
+      <div class="player-art-bg" id="playerArtBg"></div>
+      <div class="player-card">
+        <div class="player-card-top">
+          <button class="player-icon-btn" id="playerShuffleBtn" aria-label="Shuffle">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line><line x1="4" y1="4" x2="9" y2="9"></line></svg>
+          </button>
+          <button class="player-icon-btn player-heart" id="playerHeartBtn" aria-label="Like">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"></path></svg>
+          </button>
         </div>
-      </div>
-      <div class="lyrics-header">
-        <p class="lyrics-track" id="lyricsTrack"></p>
-        <p class="lyrics-artist" id="lyricsArtist"></p>
-      </div>
-      <div class="lyrics-art-wrap">
-        <img class="lyrics-art" id="lyricsArt" src="" alt="">
+
+        <div class="player-art">
+          <img id="playerArtImg" src="" alt="">
+        </div>
+
+        <p class="player-track" id="playerTrack"></p>
+        <p class="player-artist" id="playerArtist"></p>
+
+        <div class="player-progress-row">
+          <span class="player-time" id="playerTimeElapsed">0:00</span>
+          <div class="player-progress-bar">
+            <div class="player-progress-fill" id="playerProgressFill"></div>
+          </div>
+          <span class="player-time" id="playerTimeTotal">0:00</span>
+        </div>
+
+        <div class="player-controls">
+          <button class="player-control-btn" aria-label="Previous">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"></path></svg>
+          </button>
+          <button class="player-control-btn player-control-main" id="playerPlayBtn" aria-label="Play">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M8 5v14l11-7z"></path></svg>
+          </button>
+          <button class="player-control-btn" aria-label="Next">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M16 6h2v12h-2zM6 18l8.5-6L6 6z"></path></svg>
+          </button>
+        </div>
+
+        <button class="player-lyrics-trigger" id="playerLyricsTrigger">
+          <span>LYRICS</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+        </button>
       </div>
     </div>
-    <div class="lyrics-body" id="lyricsBody"></div>
+
+    <div class="lyrics-view" id="lyricsView">
+      <div class="lyrics-top-row">
+        <div class="lyrics-progress-wrap" id="lyricsProgressWrap" style="display:none;">
+          <div class="lyrics-eq">
+            <span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+        <div class="lyrics-header">
+          <p class="lyrics-track" id="lyricsTrack"></p>
+          <p class="lyrics-artist" id="lyricsArtist"></p>
+        </div>
+        <div class="lyrics-art-wrap">
+          <img class="lyrics-art" id="lyricsArt" src="" alt="">
+        </div>
+      </div>
+      <div class="lyrics-body" id="lyricsBody"></div>
+    </div>
   </div>
 `;
 document.body.appendChild(lyricsOverlay);
+
+const lyricsPanel = document.getElementById('lyricsPanel');
+let playerProgressTimer = null;
+
+function updatePlayerProgress() {
+  const elapsed = getCurrentProgressSeconds();
+  const durationSec = Number(livePlayback.duration_ms) / 1000;
+  if (elapsed === null || !Number.isFinite(durationSec) || durationSec <= 0) return;
+
+  const pct = Math.min(100, (elapsed / durationSec) * 100);
+  document.getElementById('playerProgressFill').style.width = pct + '%';
+  document.getElementById('playerTimeElapsed').textContent = formatTime(elapsed);
+  document.getElementById('playerTimeTotal').textContent = formatTime(durationSec);
+}
+
+function startPlayerProgressTimer() {
+  stopPlayerProgressTimer();
+  updatePlayerProgress();
+  playerProgressTimer = setInterval(updatePlayerProgress, 500);
+}
+
+function stopPlayerProgressTimer() {
+  if (playerProgressTimer) {
+    clearInterval(playerProgressTimer);
+    playerProgressTimer = null;
+  }
+}
 
 const lyricsBody = document.getElementById('lyricsBody');
 const lyricsTrackEl = document.getElementById('lyricsTrack');
@@ -432,24 +508,42 @@ async function fetchLyrics(artist, track) {
   }
 }
 
-function openLyrics() {
+function openPlayerView() {
   const track = document.getElementById('npTrack').textContent;
   const artist = document.getElementById('npArtist').textContent;
+  const art = document.getElementById('npAlbumArt').src || '';
 
   if (!track || track === '—') return;
 
-  lyricsTrackEl.textContent = track;
-  lyricsArtistEl.textContent = artist;
-  lyricsArtEl.src = document.getElementById('npAlbumArt').src || '';
-  lyricsBody.innerHTML = '<p class="lyrics-body loading">Loading lyrics...</p>';
+  document.getElementById('playerTrack').textContent = track;
+  document.getElementById('playerArtist').textContent = artist;
+  document.getElementById('playerArtImg').src = art;
+  document.getElementById('playerArtBg').style.backgroundImage = art ? `url(${art})` : 'none';
+
+  lyricsPanel.dataset.view = 'player';
   lyricsOverlay.classList.add('visible');
 
+  startPlayerProgressTimer();
+}
+
+function switchToLyricsView() {
+  const track = document.getElementById('playerTrack').textContent;
+  const artist = document.getElementById('playerArtist').textContent;
+  const art = document.getElementById('playerArtImg').src;
+
+  lyricsTrackEl.textContent = track;
+  lyricsArtistEl.textContent = artist;
+  lyricsArtEl.src = art;
+  lyricsBody.innerHTML = '<p class="lyrics-body loading">Loading lyrics...</p>';
+
+  lyricsPanel.dataset.view = 'lyrics';
   fetchLyrics(artist, track);
 }
 
 function closeLyrics() {
   lyricsOverlay.classList.remove('visible');
   stopPlaybackTimer();
+  stopPlayerProgressTimer();
 }
 
 lyricsOverlay.addEventListener('click', (e) => {
@@ -457,7 +551,12 @@ lyricsOverlay.addEventListener('click', (e) => {
 });
 lyricsOverlay.querySelector('.lyrics-close').addEventListener('click', closeLyrics);
 
-document.getElementById('nowPlaying').addEventListener('click', openLyrics);
+document.getElementById('playerLyricsTrigger').addEventListener('click', switchToLyricsView);
+document.getElementById('playerHeartBtn').addEventListener('click', () => {
+  document.getElementById('playerHeartBtn').classList.toggle('liked');
+});
+
+document.getElementById('nowPlaying').addEventListener('click', openPlayerView);
 
 } // end homepage-only code
 
