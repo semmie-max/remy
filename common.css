@@ -47,62 +47,53 @@ html{
 }
 
 
-#scrollIndicator{
-  position:fixed;
-  top:10px;
-  right:18px;
-  width:14px;
-  height:14px;
-  display:flex;
-  justify-content:center;
-  align-items:flex-end;
-  gap:2px;
-  opacity:0;
-  pointer-events:none;
-  z-index:999999;
-  transition:
-        opacity .3s,
-        top .1s linear;
+#proximitySidebar {
+  position: fixed;
+  top: 0;
+  right: 18px;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  z-index: 999999;
+  pointer-events: none;
 }
 
-#scrollIndicator span{
-  display:none;
+#proximitySidebar .prox-dash-list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  pointer-events: auto;
 }
 
-#scrollIndicator::before{
-  content:"";
-  width:10px;
-  height:10px;
-  background:#fff;
-  border-radius:50%;
-  display:block;
+.prox-dash-btn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 1px;
+  width: 110px;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  outline: none;
 }
 
-#scrollIndicator.playing::before{
-  display:none;
+.prox-dash-bar {
+  display: block;
+  height: 1px;
+  width: 110px;
+  transform-origin: right center;
+  transform: scaleX(var(--prox-scale, 0.27));
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), background 0.15s ease;
+  background: rgba(255, 255, 255, 0.35);
 }
 
-#scrollIndicator.playing span{
-  display:block;
-  width:3px;
-  background:#fff;
-  border-radius:999px;
-  animation:eqBounce .7s ease-in-out infinite alternate;
+.prox-dash-btn[data-kind="title"] .prox-dash-bar,
+.prox-dash-btn[data-kind="subtitle"] .prox-dash-bar {
+  background: #fff;
 }
 
-#scrollIndicator.playing span:nth-child(2){
-  animation-delay:.2s;
-}
-
-#scrollIndicator.playing span:nth-child(3){
-  animation-delay:.4s;
-}
-
-@keyframes eqBounce{
-  from{
-    height:6px;
-  }
-  to{
-    height:18px;
-  }
+.prox-dash-btn[aria-current="location"] .prox-dash-bar {
+  background: #fff;
 }

@@ -24,50 +24,158 @@
 
 
 
-const indicator = document.createElement("div");
-indicator.id = "scrollIndicator";
+(function () {
+  // Edit this list to match the actual section ids on your page.
+  // kind controls dash size: "title" > "subtitle" > "section" > "body"
+  const PROX_SECTIONS = [
+    { id: "hero", label: "Home", kind: "title" },
+    { id: "tech-stack", label: "Tech", kind: "section" },
+    { id: "projects", label: "Projects", kind: "subtitle" },
+    { id: "testimonials", label: "Testimonials", kind: "subtitle" },
+    { id: "footer", label: "Contact", kind: "section" },
+  ].filter((s) => document.getElementById(s.id));
 
-indicator.innerHTML = `
-    <span></span>
-    <span></span>
-    <span></span>
-`;
+  if (!PROX_SECTIONS.length) return;
 
-document.body.appendChild(indicator);
+  const RADIUS = 40;
+  const KIND_SIZE = {
+    title: { base: 0.36, bump: 1 },
+    subtitle: { base: 0.32, bump: 0.9 },
+    section: { base: 0.27, bump: 0.8 },
+    body: { base: 0.22, bump: 0.7 },
+  };
+  const ACTIVE_OFFSET = 0.4;
+  const IDLE_RESET_DELAY = 400;
 
-let hideTimer;
+  const nav = document.createElement("nav");
+  nav.id = "proximitySidebar";
+  nav.setAttribute("aria-label", "Page sections");
 
-function updateScrollIndicator() {
+  const list = document.createElement("div");
+  list.className = "prox-dash-list";
+  nav.appendChild(list);
+  document.body.appendChild(nav);
 
-    const maxScroll =
-        document.documentElement.scrollHeight - window.innerHeight;
+  const dashes = PROX_SECTIONS.map((section) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "prox-dash-btn";
+    btn.dataset.id = section.id;
+    btn.dataset.kind = section.kind;
+    btn.setAttribute("aria-label", `Go to ${section.label}`);
+    btn.title = section.label;
 
-    if(maxScroll <= 0) return;
+    const bar = document.createElement("span");
+    bar.className = "prox-dash-bar";
+    btn.appendChild(bar);
 
-    const progress = window.scrollY / maxScroll;
+    btn.addEventListener("click", () => {
+      const target = document.getElementById(section.id);
+      if (!target) return;
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+      history.replaceState(null, "", `#${section.id}`);
+    });
 
-    const travel =
-        window.innerHeight - 80;
+    list.appendChild(btn);
+    return { section, btn, bar };
+  });
 
-    indicator.style.top =
-        `${10 + progress * travel}px`;
+  let mouseY = Infinity;
+  let pointerInside = false;
+  let idleTimer = null;
 
-}
+  function applyProximity() {
+    dashes.forEach(({ section, btn, bar }) => {
+      const rect = btn.getBoundingClientRect();
+      const center = rect.top + rect.height / 2;
+      const dist = Math.abs(mouseY - center);
+      const size = KIND_SIZE[section.kind] || KIND_SIZE.body;
 
-window.addEventListener("scroll",()=>{
+      let t;
+      if (dist >= RADIUS) {
+        t = 0;
+      } else {
+        t = 1 - dist / RADIUS;
+      }
 
-    updateScrollIndicator();
+      const scale = size.base + (size.bump - size.base) * t;
+      bar.style.setProperty("--prox-scale", scale.toFixed(3));
+    });
+  }
 
-    indicator.style.opacity = "1";
+  function pulseTo(id) {
+    const target = dashes.find((d) => d.section.id === id);
+    if (!target) return;
+    const rect = target.btn.getBoundingClientRect();
+    mouseY = rect.top + rect.height / 2;
+    applyProximity();
 
-    clearTimeout(hideTimer);
+    if (pointerInside) return;
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(() => {
+      mouseY = Infinity;
+      applyProximity();
+    }, IDLE_RESET_DELAY);
+  }
 
-    hideTimer = setTimeout(()=>{
+  list.addEventListener("pointermove", (e) => {
+    pointerInside = true;
+    clearTimeout(idleTimer);
+    mouseY = e.clientY;
+    applyProximity();
+  });
 
-        indicator.style.opacity = "0";
+  list.addEventListener("pointerleave", () => {
+    pointerInside = false;
+    mouseY = Infinity;
+    applyProximity();
+  });
 
-    },1000);
+  function updateActive() {
+    const anchorY = window.innerHeight * ACTIVE_OFFSET;
+    let activeId = PROX_SECTIONS[0].id;
+    let shortest = Infinity;
 
-});
+    PROX_SECTIONS.forEach((section) => {
+      const el = document.getElementById(section.id);
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const contains = rect.top <= anchorY && rect.bottom >= anchorY;
+      const dist = contains
+        ? 0
+        : Math.min(Math.abs(rect.top - anchorY), Math.abs(rect.bottom - anchorY));
+      if (dist < shortest) {
+        shortest = dist;
+        activeId = section.id;
+      }
+    });
 
-updateScrollIndicator();
+    dashes.forEach(({ section, btn }) => {
+      if (section.id === activeId) {
+        btn.setAttribute("aria-current", "location");
+      } else {
+        btn.removeAttribute("aria-current");
+      }
+    });
+
+    if (!pointerInside) pulseTo(activeId);
+  }
+
+  let scrollFrame = null;
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (scrollFrame) return;
+      scrollFrame = requestAnimationFrame(() => {
+        scrollFrame = null;
+        updateActive();
+      });
+    },
+    { passive: true }
+  );
+
+  window.addEventListener("resize", updateActive);
+
+  applyProximity();
+  updateActive();
+})();
