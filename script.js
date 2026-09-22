@@ -245,12 +245,10 @@ lyricsOverlay.innerHTML = `
       <div class="player-art-bg" id="playerArtBg"></div>
       <div class="player-card">
         <div class="player-card-top">
-          <button class="player-icon-btn" id="playerShuffleBtn" aria-label="Shuffle">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line><line x1="4" y1="4" x2="9" y2="9"></line></svg>
+          <button class="player-heart-btn" id="playerHeartBtn" aria-label="Like">
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"></path></svg>
           </button>
-          <button class="player-icon-btn player-heart" id="playerHeartBtn" aria-label="Like">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"></path></svg>
-          </button>
+          <span class="player-live-dot" aria-hidden="true"></span>
         </div>
 
         <div class="player-art">
@@ -264,6 +262,7 @@ lyricsOverlay.innerHTML = `
           <span class="player-time" id="playerTimeElapsed">0:00</span>
           <div class="player-progress-bar">
             <div class="player-progress-fill" id="playerProgressFill"></div>
+            <div class="player-progress-dot" id="playerProgressDot"></div>
           </div>
           <span class="player-time" id="playerTimeTotal">0:00</span>
         </div>
@@ -281,8 +280,8 @@ lyricsOverlay.innerHTML = `
         </div>
 
         <button class="player-lyrics-trigger" id="playerLyricsTrigger">
-          <span>LYRICS</span>
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+          <span>LYRICS</span>
         </button>
       </div>
     </div>
@@ -318,6 +317,8 @@ function updatePlayerProgress() {
 
   const pct = Math.min(100, (elapsed / durationSec) * 100);
   document.getElementById('playerProgressFill').style.width = pct + '%';
+  const dot = document.getElementById('playerProgressDot');
+  if (dot) dot.style.left = pct + '%';
   document.getElementById('playerTimeElapsed').textContent = formatTime(elapsed);
   document.getElementById('playerTimeTotal').textContent = formatTime(durationSec);
 }
@@ -552,11 +553,105 @@ lyricsOverlay.addEventListener('click', (e) => {
 lyricsOverlay.querySelector('.lyrics-close').addEventListener('click', closeLyrics);
 
 document.getElementById('playerLyricsTrigger').addEventListener('click', switchToLyricsView);
+
 document.getElementById('playerHeartBtn').addEventListener('click', () => {
   document.getElementById('playerHeartBtn').classList.toggle('liked');
 });
 
 document.getElementById('nowPlaying').addEventListener('click', openPlayerView);
+
+(function () {
+  const playerView = document.getElementById('playerView');
+  if (!playerView) return;
+
+  const fadeEls = [
+    document.getElementById('playerArtImg').closest('.player-art'),
+    document.getElementById('playerTrack'),
+    document.getElementById('playerArtist'),
+    playerView.querySelector('.player-progress-row'),
+    playerView.querySelector('.player-controls')
+  ].filter(Boolean);
+
+  let startY = 0, startX = 0, startTime = 0, tracking = false, dragging = false;
+
+  const COMMIT_DISTANCE = 110;
+  const SWIPE_DISTANCE = 35;
+  const FLICK_DISTANCE = 12;
+  const FLICK_TIME = 220;
+
+  function setProgress(p) {
+    fadeEls.forEach(el => {
+      el.style.opacity = String(1 - p);
+      el.style.transform = `scale(${1 - p * 0.06}) translateY(${-p * 14}px)`;
+    });
+  }
+
+  function resetProgress() {
+    fadeEls.forEach(el => {
+      el.style.opacity = '';
+      el.style.transform = '';
+    });
+  }
+
+  function onDown(e) {
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    tracking = true;
+    dragging = false;
+    startY = e.clientY;
+    startX = e.clientX;
+    startTime = Date.now();
+  }
+
+  function onMove(e) {
+    if (!tracking) return;
+    const dy = startY - e.clientY;
+    const dx = Math.abs(e.clientX - startX);
+
+    if (dx > 60 || dy <= 0) {
+      if (dragging) {
+        dragging = false;
+        playerView.classList.remove('dragging');
+        resetProgress();
+      }
+      return;
+    }
+
+    dragging = true;
+    playerView.classList.add('dragging');
+    setProgress(Math.min(1, dy / COMMIT_DISTANCE));
+  }
+
+  function onUp(e) {
+    if (!tracking) return;
+    tracking = false;
+    const dy = startY - e.clientY;
+    const dx = Math.abs(e.clientX - startX);
+    const dt = Date.now() - startTime;
+
+    playerView.classList.remove('dragging');
+
+    if (dx > 60) { resetProgress(); dragging = false; return; }
+
+    const gentleSwipe = dy > SWIPE_DISTANCE;
+    const fastFlick = dy > FLICK_DISTANCE && dt < FLICK_TIME;
+
+    if (dragging && (gentleSwipe || fastFlick)) {
+      switchToLyricsView();
+    }
+    resetProgress();
+    dragging = false;
+  }
+
+  playerView.addEventListener('pointerdown', onDown);
+  playerView.addEventListener('pointermove', onMove);
+  playerView.addEventListener('pointerup', onUp);
+  playerView.addEventListener('pointercancel', () => {
+    tracking = false;
+    dragging = false;
+    playerView.classList.remove('dragging');
+    resetProgress();
+  });
+})();
 
 } // end homepage-only code
 
