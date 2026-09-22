@@ -1443,8 +1443,22 @@
 }
 
 .lyrics-panel[data-view="player"] .player-view { display: flex; }
-.lyrics-panel[data-view="player"] .lyrics-view { display: none; }
 .lyrics-panel[data-view="lyrics"] .player-view { display: none; }
+
+.lyrics-panel[data-view="player"] .lyrics-view {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.lyrics-panel[data-view="player"] .player-view.dragging ~ .lyrics-view {
+  transition: none;
+}
 
 .player-art-bg {
   position: absolute;

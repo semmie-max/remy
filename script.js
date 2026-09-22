@@ -343,6 +343,25 @@ let syncedLines = [];
 let songDuration = 0;
 let elapsedSeconds = 0;
 let playbackTimer = null;
+let lyricsPreviewKey = '';
+
+function prepareLyricsPreview() {
+  const track = document.getElementById('playerTrack').textContent;
+  const artist = document.getElementById('playerArtist').textContent;
+  const art = document.getElementById('playerArtImg').src;
+
+  lyricsTrackEl.textContent = track;
+  lyricsArtistEl.textContent = artist;
+  lyricsArtEl.src = art;
+  document.getElementById('lyricsArtBg').style.backgroundImage = art ? `url(${art})` : 'none';
+
+  const key = `${track}__${artist}`;
+  if (key !== lyricsPreviewKey) {
+    lyricsPreviewKey = key;
+    lyricsBody.innerHTML = '<p class="lyrics-body loading">Loading lyrics...</p>';
+    fetchLyrics(artist, track);
+  }
+}
 
 function formatTime(sec) {
   const m = Math.floor(sec / 60);
@@ -562,6 +581,8 @@ document.getElementById('nowPlaying').addEventListener('click', openPlayerView);
   const playerView = document.getElementById('playerView');
   if (!playerView) return;
 
+  const lyricsViewEl = document.getElementById('lyricsView');
+
   const fadeEls = [
     document.getElementById('playerArtImg').closest('.player-art'),
     document.getElementById('playerTrack'),
@@ -582,6 +603,10 @@ document.getElementById('nowPlaying').addEventListener('click', openPlayerView);
       el.style.opacity = String(1 - p);
       el.style.transform = `scale(${1 - p * 0.06}) translateY(${-p * 14}px)`;
     });
+    if (lyricsViewEl) {
+      lyricsViewEl.style.opacity = String(p);
+      lyricsViewEl.style.transform = `translateY(${(1 - p) * 24}px)`;
+    }
   }
 
   function resetProgress() {
@@ -589,6 +614,10 @@ document.getElementById('nowPlaying').addEventListener('click', openPlayerView);
       el.style.opacity = '';
       el.style.transform = '';
     });
+    if (lyricsViewEl) {
+      lyricsViewEl.style.opacity = '';
+      lyricsViewEl.style.transform = '';
+    }
   }
 
   function onDown(e) {
@@ -612,6 +641,10 @@ document.getElementById('nowPlaying').addEventListener('click', openPlayerView);
         resetProgress();
       }
       return;
+    }
+
+    if (!dragging) {
+      prepareLyricsPreview();
     }
 
     dragging = true;
