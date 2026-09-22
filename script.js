@@ -564,6 +564,32 @@ document.getElementById('nowPlaying').addEventListener('click', openLyrics);
   updateNameSlide();
 })();
 
+(function () {
+  const grid = document.getElementById('ghActivityGrid');
+  if (!grid) return;
+
+  const username = 'semmie-max';
+  const countEl = document.getElementById('ghActivityCount');
+
+  fetch('https://github-contributions-api.jogruber.de/v4/' + username + '?y=last')
+    .then((res) => res.json())
+    .then((data) => {
+      const days = data.contributions || [];
+      const total = days.reduce((sum, d) => sum + d.count, 0);
+      if (countEl) countEl.textContent = total + ' contributions in the last year';
+
+      days.forEach((day) => {
+        const cell = document.createElement('div');
+        cell.className = 'gh-cell gh-level-' + day.level;
+        cell.title = day.count + ' contributions on ' + day.date;
+        grid.appendChild(cell);
+      });
+    })
+    .catch(() => {
+      grid.textContent = 'could not load github activity right now';
+    });
+})();
+
 
 document.addEventListener("DOMContentLoaded", () => {
   const songListEl = document.getElementById("songList");
