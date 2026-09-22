@@ -244,13 +244,6 @@ lyricsOverlay.innerHTML = `
     <div class="player-view" id="playerView">
       <div class="player-art-bg" id="playerArtBg"></div>
       <div class="player-card">
-        <div class="player-card-top">
-          <button class="player-heart-btn" id="playerHeartBtn" aria-label="Like">
-            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"></path></svg>
-          </button>
-          <span class="player-live-dot" aria-hidden="true"></span>
-        </div>
-
         <div class="player-art">
           <img id="playerArtImg" src="" alt="">
         </div>
@@ -259,6 +252,9 @@ lyricsOverlay.innerHTML = `
         <p class="player-artist" id="playerArtist"></p>
 
         <div class="player-progress-row">
+          <button class="player-heart-btn" id="playerHeartBtn" aria-label="Like">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"></path></svg>
+          </button>
           <span class="player-time" id="playerTimeElapsed">0:00</span>
           <div class="player-progress-bar">
             <div class="player-progress-fill" id="playerProgressFill"></div>
@@ -287,6 +283,7 @@ lyricsOverlay.innerHTML = `
     </div>
 
     <div class="lyrics-view" id="lyricsView">
+      <div class="lyrics-art-bg" id="lyricsArtBg"></div>
       <div class="lyrics-top-row">
         <div class="lyrics-progress-wrap" id="lyricsProgressWrap" style="display:none;">
           <div class="lyrics-eq">
@@ -535,6 +532,7 @@ function switchToLyricsView() {
   lyricsTrackEl.textContent = track;
   lyricsArtistEl.textContent = artist;
   lyricsArtEl.src = art;
+  document.getElementById('lyricsArtBg').style.backgroundImage = art ? `url(${art})` : 'none';
   lyricsBody.innerHTML = '<p class="lyrics-body loading">Loading lyrics...</p>';
 
   lyricsPanel.dataset.view = 'lyrics';
