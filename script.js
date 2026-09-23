@@ -24,7 +24,6 @@ async function pollSpotifyProgress() {
     if (data.is_playing && data.track) {
       const widget = document.getElementById('nowPlaying');
       widget.classList.remove('hidden');
-      indicator.classList.add("playing");
       document.getElementById('npTrack').textContent = data.track;
       document.getElementById('npArtist').textContent = data.artist || '';
       const albumImg = document.getElementById('npAlbumArt');
@@ -43,7 +42,6 @@ async function pollSpotifyProgress() {
     } else if (!data.is_playing) {
       const widget = document.getElementById('nowPlaying');
       widget.classList.add('hidden');
-      indicator.classList.remove("playing");
     }
   } catch (e) {
     console.error('Progress poll failed', e);
@@ -72,12 +70,10 @@ async function fetchNowPlaying() {
     const widget = document.getElementById('nowPlaying');
     if (!isPlaying) {
       widget.classList.add('hidden');
-      indicator.classList.remove("playing");
       return;
     }
 
     widget.classList.remove('hidden');
-    indicator.classList.add("playing");
     document.getElementById('npTrack').textContent = track.name;
     document.getElementById('npArtist').textContent = track.artist['#text'];
 

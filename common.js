@@ -25,18 +25,6 @@
 
 
 (function () {
-  // Edit this list to match the actual section ids on your page.
-  // kind controls dash size: "title" > "subtitle" > "section" > "body"
-  const PROX_SECTIONS = [
-    { id: "hero", label: "Home", kind: "title" },
-    { id: "tech-stack", label: "Tech", kind: "section" },
-    { id: "projects", label: "Projects", kind: "subtitle" },
-    { id: "testimonials", label: "Testimonials", kind: "subtitle" },
-    { id: "footer", label: "Contact", kind: "section" },
-  ].filter((s) => document.getElementById(s.id));
-
-  if (!PROX_SECTIONS.length) return;
-
   const RADIUS = 40;
   const KIND_SIZE = {
     title: { base: 0.36, bump: 1 },
@@ -47,42 +35,109 @@
   const ACTIVE_OFFSET = 0.4;
   const IDLE_RESET_DELAY = 400;
 
-  const nav = document.createElement("nav");
-  nav.id = "proximitySidebar";
-  nav.setAttribute("aria-label", "Page sections");
-
-  const list = document.createElement("div");
-  list.className = "prox-dash-list";
-  nav.appendChild(list);
-  document.body.appendChild(nav);
-
-  const dashes = PROX_SECTIONS.map((section) => {
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "prox-dash-btn";
-    btn.dataset.id = section.id;
-    btn.dataset.kind = section.kind;
-    btn.setAttribute("aria-label", `Go to ${section.label}`);
-    btn.title = section.label;
-
-    const bar = document.createElement("span");
-    bar.className = "prox-dash-bar";
-    btn.appendChild(bar);
-
-    btn.addEventListener("click", () => {
-      const target = document.getElementById(section.id);
-      if (!target) return;
-      target.scrollIntoView({ behavior: "smooth", block: "start" });
-      history.replaceState(null, "", `#${section.id}`);
-    });
-
-    list.appendChild(btn);
-    return { section, btn, bar };
-  });
-
+  let nav, list;
+  let dashes = [];
+  let sections = [];
   let mouseY = Infinity;
   let pointerInside = false;
   let idleTimer = null;
+  let scrollFrame = null;
+  let rebuildTimer = null;
+
+  function detectKind(el) {
+    const explicit = el.getAttribute("data-proxy-kind");
+    if (explicit && KIND_SIZE[explicit]) return explicit;
+
+    const heading = el.querySelector("h1, h2, h3, h4, h5, h6");
+    const tag = heading?.tagName.toLowerCase();
+    if (tag === "h1") return "title";
+    if (tag === "h2") return "subtitle";
+    if (tag === "h3") return "section";
+    return "body";
+  }
+
+  function detectLabel(el) {
+    const explicit = el.getAttribute("data-proxy-label");
+    if (explicit) return explicit;
+
+    const heading = el.querySelector("h1, h2, h3, h4, h5, h6");
+    if (heading?.textContent?.trim()) return heading.textContent.trim();
+
+    return (el.id || "section").replace(/[-_]+/g, " ").trim();
+  }
+
+  function collectSections() {
+    const found = Array.from(document.querySelectorAll("[data-proxy-section]"))
+      .filter((el) => el.id)
+      .map((el) => ({
+        id: el.id,
+        label: detectLabel(el),
+        kind: detectKind(el),
+        el,
+      }));
+
+    found.sort((a, b) => {
+      const pos = a.el.compareDocumentPosition(b.el);
+      if (pos & Node.DOCUMENT_POSITION_FOLLOWING) return -1;
+      if (pos & Node.DOCUMENT_POSITION_PRECEDING) return 1;
+      return 0;
+    });
+
+    return found;
+  }
+
+  function buildNav() {
+    if (!nav) {
+      nav = document.createElement("nav");
+      nav.id = "proximitySidebar";
+      nav.setAttribute("aria-label", "Page sections");
+
+      list = document.createElement("div");
+      list.className = "prox-dash-list";
+      nav.appendChild(list);
+      document.body.appendChild(nav);
+
+      list.addEventListener("pointermove", (e) => {
+        pointerInside = true;
+        clearTimeout(idleTimer);
+        mouseY = e.clientY;
+        applyProximity();
+      });
+
+      list.addEventListener("pointerleave", () => {
+        pointerInside = false;
+        mouseY = Infinity;
+        applyProximity();
+      });
+    }
+
+    list.innerHTML = "";
+    dashes = sections.map((section) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "prox-dash-btn";
+      btn.dataset.id = section.id;
+      btn.dataset.kind = section.kind;
+      btn.setAttribute("aria-label", `Go to ${section.label}`);
+      btn.title = section.label;
+
+      const bar = document.createElement("span");
+      bar.className = "prox-dash-bar";
+      btn.appendChild(bar);
+
+      btn.addEventListener("click", () => {
+        const target = document.getElementById(section.id);
+        if (!target) return;
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+        history.replaceState(null, "", `#${section.id}`);
+      });
+
+      list.appendChild(btn);
+      return { section, btn, bar };
+    });
+
+    nav.classList.toggle("prox-empty", dashes.length === 0);
+  }
 
   function applyProximity() {
     dashes.forEach(({ section, btn, bar }) => {
@@ -91,13 +146,7 @@
       const dist = Math.abs(mouseY - center);
       const size = KIND_SIZE[section.kind] || KIND_SIZE.body;
 
-      let t;
-      if (dist >= RADIUS) {
-        t = 0;
-      } else {
-        t = 1 - dist / RADIUS;
-      }
-
+      const t = dist >= RADIUS ? 0 : 1 - dist / RADIUS;
       const scale = size.base + (size.bump - size.base) * t;
       bar.style.setProperty("--prox-scale", scale.toFixed(3));
     });
@@ -118,25 +167,14 @@
     }, IDLE_RESET_DELAY);
   }
 
-  list.addEventListener("pointermove", (e) => {
-    pointerInside = true;
-    clearTimeout(idleTimer);
-    mouseY = e.clientY;
-    applyProximity();
-  });
-
-  list.addEventListener("pointerleave", () => {
-    pointerInside = false;
-    mouseY = Infinity;
-    applyProximity();
-  });
-
   function updateActive() {
+    if (!sections.length) return;
+
     const anchorY = window.innerHeight * ACTIVE_OFFSET;
-    let activeId = PROX_SECTIONS[0].id;
+    let activeId = sections[0].id;
     let shortest = Infinity;
 
-    PROX_SECTIONS.forEach((section) => {
+    sections.forEach((section) => {
       const el = document.getElementById(section.id);
       if (!el) return;
       const rect = el.getBoundingClientRect();
@@ -151,17 +189,31 @@
     });
 
     dashes.forEach(({ section, btn }) => {
-      if (section.id === activeId) {
-        btn.setAttribute("aria-current", "location");
-      } else {
-        btn.removeAttribute("aria-current");
-      }
+      if (section.id === activeId) btn.setAttribute("aria-current", "location");
+      else btn.removeAttribute("aria-current");
     });
 
     if (!pointerInside) pulseTo(activeId);
   }
 
-  let scrollFrame = null;
+  function rebuild() {
+    const next = collectSections();
+    const changed =
+      next.length !== sections.length ||
+      next.some((s, i) => s.id !== sections[i]?.id);
+
+    sections = next;
+
+    if (changed) buildNav();
+    applyProximity();
+    updateActive();
+  }
+
+  function scheduleRebuild() {
+    clearTimeout(rebuildTimer);
+    rebuildTimer = setTimeout(rebuild, 150);
+  }
+
   window.addEventListener(
     "scroll",
     () => {
@@ -174,8 +226,22 @@
     { passive: true }
   );
 
-  window.addEventListener("resize", updateActive);
+  window.addEventListener("resize", scheduleRebuild);
+  window.addEventListener("orientationchange", scheduleRebuild);
 
-  applyProximity();
-  updateActive();
+  const observer = new MutationObserver(scheduleRebuild);
+  observer.observe(document.body, { childList: true, subtree: true });
+
+  function init() {
+    sections = collectSections();
+    buildNav();
+    applyProximity();
+    updateActive();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
 })();
