@@ -818,6 +818,47 @@ document.getElementById('nowPlaying').addEventListener('click', openPlayerView);
     });
 })();
 
+(function () {
+  const wordsWrap = document.getElementById('textStreamWords');
+  if (!wordsWrap) return;
+
+  const words = Array.from(wordsWrap.querySelectorAll('.textstream-word'));
+  if (!words.length) return;
+
+  const TEXTSTREAM_INTERVAL_MS = 1800;
+  const TEXTSTREAM_EXIT_MS = 500;
+
+  function sizeToWidestWord() {
+    let maxWidth = 0;
+    words.forEach((word) => {
+      word.style.position = 'static';
+      maxWidth = Math.max(maxWidth, word.getBoundingClientRect().width);
+      word.style.position = 'absolute';
+    });
+    wordsWrap.style.width = `${Math.ceil(maxWidth)}px`;
+  }
+
+  sizeToWidestWord();
+  window.addEventListener('resize', sizeToWidestWord);
+
+  let current = 0;
+  words[current].classList.add('is-active');
+
+  setInterval(() => {
+    const currentEl = words[current];
+    currentEl.classList.remove('is-active');
+    currentEl.classList.add('is-exiting');
+
+    current = (current + 1) % words.length;
+    const nextEl = words[current];
+    nextEl.classList.add('is-active');
+
+    setTimeout(() => {
+      currentEl.classList.remove('is-exiting');
+    }, TEXTSTREAM_EXIT_MS);
+  }, TEXTSTREAM_INTERVAL_MS);
+})();
+
 
 document.addEventListener("DOMContentLoaded", () => {
   const songListEl = document.getElementById("songList");
