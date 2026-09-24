@@ -254,6 +254,8 @@
       mousePosition: { x: -1, y: -1 },
       zoom: 1,
       targetZoom: 1,
+      tracks: options.tracks || [],
+      pointerDownPos: { x: 0, y: 0 },
     };
 
     const scene = new THREE.Scene();
@@ -321,6 +323,8 @@
     function onPointerDown(event) {
       event.preventDefault();
       if (container.setPointerCapture) container.setPointerCapture(event.pointerId);
+      state.pointerDownPos.x = event.clientX;
+      state.pointerDownPos.y = event.clientY;
       startDrag(event.clientX, event.clientY);
     }
     function onPointerMove(event) {
@@ -331,7 +335,53 @@
       if (container.hasPointerCapture && container.hasPointerCapture(event.pointerId)) {
         container.releasePointerCapture(event.pointerId);
       }
+      const dx = event.clientX - state.pointerDownPos.x;
+      const dy = event.clientY - state.pointerDownPos.y;
+      const movedDistance = Math.sqrt(dx * dx + dy * dy);
+      if (movedDistance < 6) {
+        handleTileClick(event);
+      }
       endDrag();
+    }
+
+    function glslMod(a, b) {
+      return a - b * Math.floor(a / b);
+    }
+
+    function handleTileClick(event) {
+      if (!state.tracks.length) return;
+      const rect = renderer.domElement.getBoundingClientRect();
+      const px = event.clientX - rect.left;
+      const py = event.clientY - rect.top;
+      const width = rect.width;
+      const height = rect.height;
+
+      let screenUVx = (px / width) * 2 - 1;
+      let screenUVy = -((py / height) * 2 - 1);
+      const radius = Math.sqrt(screenUVx * screenUVx + screenUVy * screenUVy);
+      const distortion = 1.0 - 0.08 * radius * radius;
+      const distortedX = screenUVx * distortion;
+      const distortedY = screenUVy * distortion;
+      const aspectX = width / height;
+
+      let worldX = distortedX * aspectX;
+      let worldY = distortedY * 1.0;
+      worldX *= state.zoom;
+      worldY *= state.zoom;
+      worldX += state.offset.x;
+      worldY += state.offset.y;
+
+      const cellX = Math.floor(worldX / cellSize);
+      const cellY = Math.floor(worldY / cellSize);
+      const textureCount = state.tracks.length;
+      const texIndex = Math.floor(glslMod(cellX + cellY * 3, textureCount));
+
+      const track = state.tracks[texIndex];
+      if (!track || !track.uri) return;
+
+      const trackId = track.uri.split(":").pop();
+      const webUrl = `https://open.spotify.com/track/${trackId}`;
+      window.open(webUrl, "_blank");
     }
     function onPointerLeave() {
       state.mousePosition.x = state.mousePosition.y = -1;
@@ -429,7 +479,7 @@ Promise.all(images.map((src) => loadWithTimeout(src, 800))).then((imageTiles) =>
         const images = tracks.map((t) => pickTrackImage(t, playlist));
         const items = tracks.map((t) => ({ title: t.name, year: t.artist }));
 
-        initArtGallery(container, { images: images, items: items });
+        initArtGallery(container, { images: images, items: items, tracks: tracks });
       })
       .catch((e) => console.error("Art gallery: playlist fetch failed", e));
   });
