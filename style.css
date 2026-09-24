@@ -269,9 +269,19 @@
   text-overflow: ellipsis;
   max-width: 140px;
 }
+.page-body {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  padding: 0 1.5rem;
+  box-sizing: border-box;
+}
 
 #tech-stack {
-  padding: 4rem 2rem;
+  padding: 4rem 0;
   display: flex;
   justify-content: center;
   position: relative;
@@ -333,9 +343,9 @@
   }
 
 #projects {
-  padding: 4rem 2rem;
-  max-width: 600px;
-  margin: 0 auto;
+  padding: 4rem 0;
+  max-width: none;
+  margin: 0;
 }
 
 .section-title {
@@ -390,9 +400,9 @@
 }
 
 #testimonials {
-  padding: 6rem 2rem;
-  max-width: 600px;
-  margin: 0 auto;
+  padding: 6rem 0;
+  max-width: none;
+  margin: 0;
   min-height: 300px;
   display: flex;
   align-items: center;
@@ -435,11 +445,15 @@
   letter-spacing: 0.1em;
 }
 #footer {
-  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-top: 1px solid rgba(255,255,255,0.06);
+  box-sizing: border-box;
 }
 
 .footer-left {
@@ -733,6 +747,19 @@
    so it does not affect any of the rules above.
    =================================================================== */
 
+.frag-page {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2.5rem;
+  padding: 4rem 1.5rem;
+  box-sizing: border-box;
+}
+
 .frag-hero {
   position: relative;
   min-height: auto;
@@ -740,9 +767,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding: 4rem 2rem;
-  padding-top: 12vh;
-  background: #000;
+  padding: 0;
+  background: transparent;
   box-sizing: border-box;
 }
 
@@ -763,8 +789,19 @@
   min-height: 1.7em;
 }
 
-.frag-line.typing {
-  border-right: 2px solid #fff;
+.frag-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.1em;
+  background: #fff;
+  margin-left: 1px;
+  vertical-align: text-bottom;
+  animation: fragBlink 0.8s steps(1) infinite;
+}
+
+@keyframes fragBlink {
+  0%, 50% { opacity: 1; }
+  50.01%, 100% { opacity: 0; }
 }
 
 
@@ -950,8 +987,8 @@
 .playlist-section {
   width: 100%;
   max-width: 680px;
-  margin: 10px auto 30px auto; /* Tighter gap at top */
-  padding: 0 16px;
+  margin: 0 auto;
+  padding: 0;
   box-sizing: border-box;
 }
 
@@ -1364,8 +1401,8 @@
 .github-activity-wrap {
   width: 100%;
   max-width: 700px;
-  margin: 2.5rem auto 0;
-  padding: 0 1rem;
+  margin: 0 auto;
+  padding: 0;
   box-sizing: border-box;
 }
 .github-activity-header {

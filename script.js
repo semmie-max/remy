@@ -707,20 +707,27 @@ document.getElementById('nowPlaying').addEventListener('click', openPlayerView);
     });
   }
 
-  const FRAG_TYPE_SPEED = 32;
+  const FRAG_TYPE_SPEED = 8;
+  const FRAG_CHARS_PER_TICK = 2;
 
   function typeFragLine(el) {
     const fullText = el.textContent;
     el.textContent = '';
-    el.classList.add('typing');
+
+    const textSpan = document.createElement('span');
+    const cursorSpan = document.createElement('span');
+    cursorSpan.className = 'frag-cursor';
+
+    el.appendChild(textSpan);
+    el.appendChild(cursorSpan);
 
     let i = 0;
     const interval = setInterval(() => {
-      el.textContent += fullText[i];
-      i++;
+      textSpan.textContent += fullText.slice(i, i + FRAG_CHARS_PER_TICK);
+      i += FRAG_CHARS_PER_TICK;
       if (i >= fullText.length) {
         clearInterval(interval);
-        el.classList.remove('typing');
+        cursorSpan.remove();
       }
     }, FRAG_TYPE_SPEED);
   }
