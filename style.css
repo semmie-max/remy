@@ -1789,3 +1789,10 @@
   0%, 100% { transform: translateY(0); opacity: 0.5; }
   50% { transform: translateY(-3px); opacity: 1; }
 }
+
+#artGallery {
+  width: 100%;
+  height: 480px;
+  position: relative;
+  overflow: hidden;
+}

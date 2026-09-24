@@ -49,47 +49,14 @@
   </section>
 
   <!-- PLAYLIST SECTION START -->
-<section class="playlist-section">
-    <div class="playlist-card">
-
-      <div class="playlist-header">
-        <div class="playlist-title-group">
-          <svg class="playlist-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-            <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
-          </svg>
-          <h3 id="playlistName">My Playlist</h3>
-        </div>
-        <span class="playlist-badge">soundtracking my days</span>
-      </div>
-
-      <div class="playlist-body">
-        <div class="playlist-art">
-          <img id="playlistCoverImg" src="" alt="">
-          <p class="playlist-art-title" id="playlistCoverTitle"></p>
-          <p class="playlist-art-sub" id="playlistCoverSub"></p>
-        </div>
-
-        <div class="playlist-scroll-container">
-          <ul class="song-list" id="songList">
-            <!-- song items get rendered in here by JS -->
-          </ul>
-        </div>
-      </div>
-
-      <div class="playlist-controls">
-        <button id="plPrev" aria-label="Previous">⏮</button>
-        <button id="plPlay" aria-label="Play">▶</button>
-        <button id="plNext" aria-label="Next">⏭</button>
-        <div class="playlist-progress">
-          <div class="playlist-progress-fill" id="plProgressFill"></div>
-        </div>
-      </div>
-
-    </div>
+  <section class="playlist-section">
+    <div id="artGallery"></div>
   </section>
   <!-- PLAYLIST SECTION END -->
   </div>
 
   <script src="../script.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="../art-gallery.js"></script>
 </body>
 </html>
