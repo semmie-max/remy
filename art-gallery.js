@@ -348,7 +348,14 @@
       if (plane) plane.material.uniforms.uResolution.value.set(width, height);
     }
 
-    Promise.all(images.map(loadImageTexture)).then((imageTiles) => {
+    function loadWithTimeout(src, ms) {
+  return Promise.race([
+    loadImageTexture(src),
+    new Promise((resolve) => setTimeout(() => resolve(blankTexture()), ms)),
+  ]);
+}
+
+Promise.all(images.map((src) => loadWithTimeout(src, 800))).then((imageTiles) => {
       if (cancelled) {
         imageTiles.forEach((t) => t.dispose());
         return;
