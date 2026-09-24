@@ -840,6 +840,9 @@ document.getElementById('nowPlaying').addEventListener('click', openPlayerView);
 
   sizeToWidestWord();
   window.addEventListener('resize', sizeToWidestWord);
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(sizeToWidestWord);
+  }
 
   let current = 0;
   words[current].classList.add('is-active');
