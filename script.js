@@ -1029,3 +1029,35 @@ document.addEventListener("DOMContentLoaded", () => {
       .catch(() => {});
   });
 })();
+
+(function () {
+  const avatar = document.querySelector('.profile-avatar');
+  if (!avatar) return;
+
+  const root = document.documentElement;
+
+  try {
+    if (localStorage.getItem('remomheTheme') === 'light') {
+      root.classList.add('light-theme');
+    }
+  } catch (e) {}
+
+  avatar.setAttribute('role', 'button');
+  avatar.setAttribute('tabindex', '0');
+  avatar.setAttribute('aria-label', 'Toggle light and dark theme');
+
+  function toggleTheme() {
+    const isLight = root.classList.toggle('light-theme');
+    try {
+      localStorage.setItem('remomheTheme', isLight ? 'light' : 'dark');
+    } catch (e) {}
+  }
+
+  avatar.addEventListener('click', toggleTheme);
+  avatar.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      toggleTheme();
+    }
+  });
+})();

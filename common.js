@@ -34,7 +34,10 @@
       <div class="sp-ticks"></div>
       <div class="sp-fill"></div>
       <div class="sp-head">
-        <span class="sp-dot"></span>
+        <span class="sp-ripple"></span>
+        <svg class="sp-pin" viewBox="0 0 24 32" aria-hidden="true">
+          <path fill-rule="evenodd" d="M12 0C5.4 0 0 5.4 0 12c0 9 12 20 12 20s12-11 12-20C24 5.4 18.6 0 12 0zm0 17a5 5 0 0 1 0-10 5 5 0 0 1 0 10z"/>
+        </svg>
         <span class="sp-label">0</span>
       </div>
     </div>

@@ -2030,3 +2030,176 @@ a.profile-meta-item:hover {
     animation: none;
   }
 }
+
+
+/* ===== Theme toggle (tap profile picture) ===== */
+
+.profile-avatar {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.2s ease;
+}
+
+.profile-avatar:active {
+  transform: scale(0.94);
+}
+
+html, body {
+  transition: background-color 0.35s ease, color 0.35s ease;
+}
+
+/* ===== Light theme ===== */
+
+html.light-theme,
+html.light-theme body {
+  background: #f4f4f2;
+  color: #111111;
+}
+
+html.light-theme #tech-stack {
+  background: #f4f4f2;
+}
+
+html.light-theme .tech-grid img {
+  filter: grayscale(100%) brightness(0.35);
+  opacity: 0.8;
+}
+
+
+
+/* banner + avatar */
+html.light-theme .profile-banner {
+  border-radius: 0 0 20px 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+html.light-theme .profile-avatar {
+  border-color: #f4f4f2;
+}
+
+/* text */
+html.light-theme #row2,
+html.light-theme .profile-bio,
+html.light-theme .profile-stat-num,
+html.light-theme .section-title,
+html.light-theme .project-name,
+html.light-theme .testimonial-text,
+html.light-theme .signature,
+html.light-theme .github-activity-header,
+html.light-theme .about-word {
+  color: #111111;
+}
+
+html.light-theme .about-text {
+  color: #666666;
+}
+
+html.light-theme .profile-meta-item,
+html.light-theme .profile-stat-label {
+  color: #6b6b6b;
+}
+
+html.light-theme .project-desc {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+html.light-theme .project-url,
+html.light-theme #testiName {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+html.light-theme .project-item,
+html.light-theme #footer {
+  border-top-color: rgba(0, 0, 0, 0.1);
+}
+
+html.light-theme .testimonial-text {
+  border-right: 2px solid #111111 !important;
+}
+
+html.light-theme .sig-underline {
+  background: #111111;
+}
+
+/* nav */
+html.light-theme .site-nav a {
+  color: #888888;
+}
+
+html.light-theme .site-nav a:hover {
+  color: #111111;
+}
+
+html.light-theme .site-nav a::after {
+  background: #111111;
+}
+
+/* now playing pill */
+html.light-theme .now-playing {
+  background: rgba(255, 255, 255, 0.75);
+  border-color: rgba(0, 0, 0, 0.12);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  color: #111111;
+}
+
+html.light-theme .np-eq span {
+  background: #111111;
+}
+
+/* github grid */
+html.light-theme .gh-level-0 { background: #e2e2df; }
+html.light-theme .gh-level-1 { background: #bdbdbd; }
+html.light-theme .gh-level-2 { background: #8a8a8a; }
+html.light-theme .gh-level-3 { background: #4d4d4d; }
+html.light-theme .gh-level-4 { background: #000000; }
+
+/* like button */
+html.light-theme .profile-btn {
+  color: #111111 !important;
+  text-shadow: none !important;
+  background: transparent !important;
+  border: 1px solid rgba(0, 0, 0, 0.35) !important;
+  box-shadow: none !important;
+  animation: none !important;
+}
+
+html.light-theme .profile-btn:hover {
+  background: rgba(0, 0, 0, 0.06) !important;
+}
+
+html.light-theme .profile-btn.liked {
+  color: #ffffff !important;
+  background: #111111 !important;
+  border-color: #111111 !important;
+}
+
+/* scroll progress indicator, light theme */
+html.light-theme .sp-track {
+  background: rgba(0, 0, 0, 0.12);
+}
+
+html.light-theme .sp-tick {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+html.light-theme .sp-tick.passed {
+  background: #111111;
+}
+
+html.light-theme .sp-fill {
+  background: #111111;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.35);
+}
+
+html.light-theme .sp-pin {
+  fill: #111111;
+  filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.3));
+}
+
+html.light-theme .sp-ripple {
+  border-color: rgba(0, 0, 0, 0.5);
+}
+
+html.light-theme .sp-label {
+  color: rgba(0, 0, 0, 0.7);
+}
