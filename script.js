@@ -132,6 +132,12 @@ let testiIndex = 0;
 
 function typeTestimonial(text, callback) {
   const el = document.getElementById('testiText');
+  if (document.documentElement.classList.contains('reduce-motion')) {
+    el.textContent = text;
+    el.style.borderRight = 'none';
+    if (callback) callback();
+    return;
+  }
   el.textContent = '';
   el.style.borderRight = '2px solid #fff';
   let i = 0;
@@ -1060,4 +1066,116 @@ document.addEventListener("DOMContentLoaded", () => {
       toggleTheme();
     }
   });
+})();
+
+(function () {
+  const FONT_SIZES = [85, 92.5, 100, 112.5, 125];
+  const root = document.documentElement;
+
+  function applyFont(index) {
+    root.style.fontSize = FONT_SIZES[index] + '%';
+  }
+
+  let saved = 2;
+  try {
+    const stored = parseInt(localStorage.getItem('remomheFontStep'), 10);
+    if (stored >= 0 && stored < FONT_SIZES.length) saved = stored;
+  } catch (e) {}
+  applyFont(saved);
+
+  const btn = document.getElementById('settingsBtn');
+  const panel = document.getElementById('settingsPanel');
+  const backdrop = document.getElementById('settingsBackdrop');
+  const closeBtn = document.getElementById('settingsClose');
+  const slider = document.getElementById('fontSizeSlider');
+  if (!btn || !panel || !backdrop || !slider) return;
+
+  slider.value = saved;
+
+  function openSettings() {
+    panel.classList.add('open');
+    backdrop.classList.add('open');
+    panel.setAttribute('aria-hidden', 'false');
+  }
+
+  function closeSettings() {
+    panel.classList.remove('open');
+    backdrop.classList.remove('open');
+    panel.setAttribute('aria-hidden', 'true');
+  }
+
+  btn.addEventListener('click', openSettings);
+  backdrop.addEventListener('click', closeSettings);
+  if (closeBtn) closeBtn.addEventListener('click', closeSettings);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeSettings();
+  });
+
+  slider.addEventListener('input', () => {
+    const step = parseInt(slider.value, 10);
+    applyFont(step);
+    try {
+      localStorage.setItem('remomheFontStep', String(step));
+    } catch (e) {}
+  });
+})();
+
+
+(function () {
+  const root = document.documentElement;
+  const ACCENTS = ['default', 'pink', 'red', 'green'];
+  const swatches = document.querySelectorAll('#accentSwatches .swatch');
+  const motionSwitch = document.getElementById('reduceMotionSwitch');
+
+  function setAccent(name, save) {
+    if (!ACCENTS.includes(name) || name === 'default') {
+      name = 'default';
+      root.removeAttribute('data-accent');
+      root.classList.remove('has-accent');
+    } else {
+      root.setAttribute('data-accent', name);
+      root.classList.add('has-accent');
+    }
+    swatches.forEach((s) => {
+      s.classList.toggle('active', s.dataset.accent === name);
+    });
+    if (save) {
+      try { localStorage.setItem('remomheAccent', name); } catch (e) {}
+    }
+  }
+
+  function setReduceMotion(on, save) {
+    root.classList.toggle('reduce-motion', on);
+    if (motionSwitch) motionSwitch.setAttribute('aria-checked', on ? 'true' : 'false');
+    if (save) {
+      try { localStorage.setItem('remomheReduceMotion', on ? '1' : '0'); } catch (e) {}
+    }
+  }
+
+  let savedAccent = 'default';
+  let savedMotion = null;
+  try {
+    savedAccent = localStorage.getItem('remomheAccent') || 'default';
+    savedMotion = localStorage.getItem('remomheReduceMotion');
+  } catch (e) {}
+
+  setAccent(savedAccent, false);
+
+  if (savedMotion === null) {
+    const osPrefers = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    setReduceMotion(osPrefers, false);
+  } else {
+    setReduceMotion(savedMotion === '1', false);
+  }
+
+  swatches.forEach((s) => {
+    s.addEventListener('click', () => setAccent(s.dataset.accent, true));
+  });
+
+  if (motionSwitch) {
+    motionSwitch.addEventListener('click', () => {
+      setReduceMotion(!root.classList.contains('reduce-motion'), true);
+    });
+  }
 })();
