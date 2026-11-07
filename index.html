@@ -48,14 +48,31 @@
 </nav>
     <script src="common.js"></script>
 <div id="hero" data-proxy-section data-proxy-label="Home" data-proxy-kind="title">
-  <div class="hero-bg"></div>
-  <div class="hero-content">
-    <div class="name-row" id="row1"></div>
-    <div class="name-gap"></div>
-    <div class="name-row" id="row2"></div>
-    <div class="role">Software Developer</div>
-    <div class="socials">
-      <a href="mailto:hello@remomhe.cv" target="_blank">Gmail</a>
+  <div class="profile-banner">
+    <img src="/images/banner.jpg" alt="">
+  </div>
+  <div class="profile-top">
+    <div class="profile-avatar">
+      <img src="/images/profile.jpg" alt="">
+    </div>
+    <button class="profile-btn" id="likeBtn" type="button">Like</button>
+  </div>
+  <div class="profile-info">
+    <div class="profile-name" id="row2"></div>
+    <div class="profile-bio">Software Developer</div>
+    <div class="profile-meta">
+      <span class="profile-meta-item">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+        <span>6° above the equator</span>
+      </span>
+      <a class="profile-meta-item" href="mailto:aremomheremy@gmail.com" target="_blank">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><polyline points="3 7 12 13 21 7"></polyline></svg>
+        <span>hello@remomhe.cv</span>
+      </a>
+    </div>
+    <div class="profile-stats">
+      <span class="profile-stat-num" id="likeCount">0</span>
+      <span class="profile-stat-label">Likes</span>
     </div>
   </div>
   <div class="now-playing" id="nowPlaying">

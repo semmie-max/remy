@@ -984,3 +984,47 @@ document.addEventListener("DOMContentLoaded", () => {
 
   loadSignatures();
 })();
+
+(function () {
+  const btn = document.getElementById('likeBtn');
+  const countEl = document.getElementById('likeCount');
+  if (!btn || !countEl) return;
+
+  const LIKE_API = 'https://now-playing-proxy.aremomheremy.workers.dev';
+
+  function setCount(n) {
+    countEl.textContent = n;
+  }
+
+  function markLiked() {
+    btn.textContent = 'Liked';
+    btn.classList.add('liked');
+  }
+
+  let alreadyLiked = false;
+  try {
+    alreadyLiked = localStorage.getItem('remomheLiked') === '1';
+  } catch (e) {}
+  if (alreadyLiked) markLiked();
+
+  fetch(`${LIKE_API}/likes`)
+    .then((r) => r.json())
+    .then((d) => {
+      setCount(d.count || 0);
+      if (d.liked) markLiked();
+    })
+    .catch(() => setCount(0));
+
+  btn.addEventListener('click', () => {
+    if (btn.classList.contains('liked')) return;
+    markLiked();
+    try {
+      localStorage.setItem('remomheLiked', '1');
+    } catch (e) {}
+
+    fetch(`${LIKE_API}/like`, { method: 'POST' })
+      .then((r) => r.json())
+      .then((d) => setCount(d.count))
+      .catch(() => {});
+  });
+})();
