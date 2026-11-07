@@ -49,11 +49,136 @@ html{
 
 #scrollProgress {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 2px;
-  height: 0%;
-  background: #fff;
+  left: 22px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 52vh;
+  width: 14px;
   z-index: 999999;
   pointer-events: none;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.sp-track {
+  position: relative;
+  height: 100%;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.sp-ticks {
+  position: absolute;
+  inset: 0;
+}
+
+.sp-tick {
+  position: absolute;
+  left: 0;
+  width: 5px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.2);
+  transition: width 0.3s ease, background 0.3s ease;
+}
+
+.sp-tick.passed {
+  width: 10px;
+  background: #fff;
+}
+
+.sp-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 0%;
+  background: #fff;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+}
+
+.sp-head {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  transform: translateY(-100%);
+}
+
+.sp-pin {
+  display: block;
+  flex-shrink: 0;
+  width: 18px;
+  height: 24px;
+  margin-left: -8.5px;
+  fill: #fff;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.7));
+  animation: spBob 2.2s ease-in-out infinite;
+}
+
+.sp-ripple {
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 18px;
+  height: 6px;
+  margin-left: -9px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  animation: spRipple 2.2s ease-out infinite;
+}
+
+.sp-label {
+  margin-top: 3px;
+  font-size: 0.65rem;
+  line-height: 1;
+  letter-spacing: 0.15em;
+  color: rgba(255, 255, 255, 0.75);
+  font-variant-numeric: tabular-nums;
+}
+
+.sp-label::after {
+  content: '%';
+  opacity: 0.4;
+  margin-left: 1px;
+}
+
+@keyframes spBob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-3px); }
+}
+
+@keyframes spRipple {
+  0%   { transform: scale(0.3); opacity: 0.9; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+@media (max-width: 640px) {
+  #scrollProgress {
+    left: 6px;
+    height: 40vh;
+  }
+
+  .sp-label,
+  .sp-tick {
+    display: none;
+  }
+
+  .sp-pin {
+    width: 14px;
+    height: 19px;
+    margin-left: -6.5px;
+  }
+
+  .sp-ripple {
+    width: 14px;
+    margin-left: -7px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sp-pin,
+  .sp-ripple {
+    animation: none;
+  }
 }
