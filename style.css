@@ -1992,3 +1992,41 @@ a.profile-meta-item:hover {
     width: calc(100% + 0.5rem);
   }
 }
+
+.about-word {
+  color: #ffffff;
+  cursor: default;
+  white-space: nowrap;
+}
+
+.about-word svg {
+  display: inline-block;
+  width: 0.95em;
+  height: 0.95em;
+  margin-right: 0.25em;
+  vertical-align: -0.14em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transform-origin: center;
+}
+
+.about-word:hover svg {
+  animation: aboutShake 0.45s ease-in-out infinite;
+}
+
+@keyframes aboutShake {
+  0%, 100% { transform: rotate(0deg) translateX(0); }
+  20%      { transform: rotate(-14deg) translateX(-1px); }
+  40%      { transform: rotate(12deg) translateX(1px); }
+  60%      { transform: rotate(-10deg) translateX(-1px); }
+  80%      { transform: rotate(8deg) translateX(1px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-word:hover svg {
+    animation: none;
+  }
+}
