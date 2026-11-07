@@ -47,87 +47,13 @@ html{
 }
 
 
-#proximitySidebar {
+#scrollProgress {
   position: fixed;
   top: 0;
-  right: max(18px, env(safe-area-inset-right, 0px));
-  height: 100dvh;
-  display: flex;
-  align-items: center;
+  left: 0;
+  width: 2px;
+  height: 0%;
+  background: #fff;
   z-index: 999999;
   pointer-events: none;
-}
-
-#proximitySidebar.prox-empty {
-  display: none;
-}
-
-#proximitySidebar .prox-dash-list {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: clamp(6px, 1vh, 10px);
-  pointer-events: auto;
-}
-
-.prox-dash-btn {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  height: 14px;
-  width: clamp(46px, 9vw, 110px);
-  border: 0;
-  background: transparent;
-  padding: 0;
-  cursor: pointer;
-  outline: none;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.prox-dash-bar {
-  display: block;
-  height: 1px;
-  width: 100%;
-  transform-origin: right center;
-  transform: scaleX(var(--prox-scale, 0.27));
-  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), background 0.15s ease;
-  background: rgba(255, 255, 255, 0.35);
-}
-
-.prox-dash-btn[data-kind="title"] .prox-dash-bar,
-.prox-dash-btn[data-kind="subtitle"] .prox-dash-bar {
-  background: #fff;
-}
-
-.prox-dash-btn[aria-current="location"] .prox-dash-bar {
-  background: #fff;
-}
-
-@media (max-width: 768px) {
-  #proximitySidebar {
-    right: max(8px, env(safe-area-inset-right, 0px));
-  }
-
-  .prox-dash-list {
-    gap: 10px;
-  }
-
-  .prox-dash-btn {
-    width: 26px;
-    height: 18px;
-  }
-
-  .prox-dash-bar {
-    height: 3px;
-    border-radius: 3px;
-    transform: none;
-    width: calc(6px + (14px * var(--prox-scale, 0.27)));
-    transition: width 0.28s cubic-bezier(0.22, 1, 0.36, 1), background 0.15s ease;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .prox-dash-bar {
-    transition: none;
-  }
 }
