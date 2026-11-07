@@ -711,10 +711,11 @@ document.getElementById('nowPlaying').addEventListener('click', openPlayerView);
   const FRAG_CHARS_PER_TICK = 2;
 
   function typeFragLine(el) {
-    const fullText = el.textContent;
+    const fullText = el.innerText;
     el.textContent = '';
 
     const textSpan = document.createElement('span');
+    textSpan.style.whiteSpace = 'pre-line';
     const cursorSpan = document.createElement('span');
     cursorSpan.className = 'frag-cursor';
 

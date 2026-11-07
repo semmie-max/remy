@@ -1453,10 +1453,10 @@
   border-radius: 2px;
 }
 .gh-level-0 { background: #1b1b1b; }
-.gh-level-1 { background: #0e4429; }
-.gh-level-2 { background: #006d32; }
-.gh-level-3 { background: #26a641; }
-.gh-level-4 { background: #39d353; }
+.gh-level-1 { background: #4a4a4a; }
+.gh-level-2 { background: #8a8a8a; }
+.gh-level-3 { background: #c4c4c4; }
+.gh-level-4 { background: #ffffff; }
 
 @media (max-width: 640px) {
   .github-activity-wrap {
@@ -1977,5 +1977,18 @@ a.profile-meta-item:hover {
     width: 88px;
     height: 88px;
     margin-top: -44px;
+  }
+}
+
+.about-text {
+  color: #9a9a9a;
+  margin-left: -0.5rem;
+  width: calc(100% + 0.5rem);
+}
+
+@media (max-width: 640px) {
+  .about-text {
+    margin-left: -0.5rem;
+    width: calc(100% + 0.5rem);
   }
 }
