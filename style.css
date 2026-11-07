@@ -2203,3 +2203,11 @@ html.light-theme .sp-ripple {
 html.light-theme .sp-label {
   color: rgba(0, 0, 0, 0.7);
 }
+
+
+/* hide scroll progress indicator on mobile */
+@media (max-width: 640px) {
+  #scrollProgress {
+    display: none !important;
+  }
+}
